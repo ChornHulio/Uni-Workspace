@@ -1,0 +1,28 @@
+Sokoban-Spiel-Problemformulierung
+Bearbeiter: Tobias Dreher, Dimitrij Zharkov
+Datum: 30.10.2011
+
+*** Zustände ***
+Beschreibung der Lage der 
+	- freien Felder
+	- Kisten
+	- Zielfelder 
+	- Spielfigur
+Die Beschreibung der Lage der Wände ist nicht direkt relevant für die Formulierung
+eines Algorithmus, lediglich für die grafische Darstellung. In der Implementierung
+(Aufgabe2-2) werden Wände somit auch als Zustandsmerkmale gespeichert.
+
+*** Aktionen ***
+Verschieben der Spielfigur von Feld A auf Feld B, wobei gilt:
+	- das Feld hinter B aus Sicht von Feld A wird Feld C genannt
+	- ist B ein freies Feld, geht Spielfigur von A auf B
+	- ist auf B eine Kiste und ...
+		- C ein freies Feld oder ein Zielfeld, wird B auf C geschoben und die Spielfigur geht auf B
+		- C kein freies Feld oder Zielfeld, geht dieser Spielzug nicht
+	- ist B kein freies Feld, Zielfeld oder Kiste, geht dieser Spielzug nicht
+
+*** Ziel ***
+Alle Kisten befinden sich auf einem Zielfeld
+
+*** Ausführungskosten ***
+Jede Aktion kostet eine Einheit

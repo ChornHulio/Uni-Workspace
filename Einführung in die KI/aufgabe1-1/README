@@ -1,0 +1,23 @@
+Einführung in die KI
+Aufgabe 1-1
+Bearbeiter: Tobias Dreher, 771795
+
+Projekt erstellt mit Eclipse 3.7 und JavaSE 6 unter Ubuntu 10.04
+
+
+Konfiguration: 
+Nummerierung der Kacheln von links nach rechts und von oben nach unten. Das sieht wie folgt aus:
+      ___     ___
+  ___/ 1 \___/ 2 \___
+ / 3 \___/ 4 \___/ 5 \
+ \___/ 6 \___/ 7 \___/
+     \___/   \___/
+
+Konfiguration des Feldes kann in der Klasse Feld vorgenommen werden.
+Start- und Zielpunkt sind als Standard Kachel 1 und Kachel 15 festgelegt. 
+Über Konsolenparameter können andere Start- und Zielpunkte ausgewählt werden: 
+	java -jar aufgabe1-1.jar STARTNUMMER ZIELNUMMER
+
+Algorithmus: Backtrack
+
+Ergebnis: Navigiert von einem beliebigen Punkt zu einem anderen und gibt den Pfad an. Dabei wird nicht nach dem kürzesten Pfad gesucht, sondern lediglich nach einem existierenden.

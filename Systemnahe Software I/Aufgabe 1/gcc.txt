@@ -1,0 +1,4 @@
+Option	| Beschreibung
+----------------------
+-Wall	| Mit diesem Flag werden mehr Warnungen ausgegeben (bsp.:Sprachen spezifische Warnungen) als ohne setzen des Flags
+-o	| Bei weglassen wird eine Datei a.out erzeugt. a.out ist dabei das ausfuehrbare Programm.
