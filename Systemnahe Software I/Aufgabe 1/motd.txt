@@ -1,6 +1,0 @@
-Befehl	| Beschreibung
-----------------------
-cp	| kopiert die Datei in ein anderes Verzeichnis
-mkdir	| Erstellt ein Ordner im Verzeichnis
-cd	| Ordner wechseln
-ls 	| Verzeichnis bzw. Inhalte auflisten
