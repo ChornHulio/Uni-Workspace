@@ -22,7 +22,7 @@ Verschieben der Spielfigur von Feld A auf Feld B, wobei gilt:
 	- ist B kein freies Feld, Zielfeld oder Kiste, geht dieser Spielzug nicht
 
 *** Ziel ***
-Alle Kisten befinden sich auf einem Zielfeld
+Alle Kisten befinden sich auf je einem Zielfeld
 
 *** Ausführungskosten ***
 Jede Aktion kostet eine Einheit
