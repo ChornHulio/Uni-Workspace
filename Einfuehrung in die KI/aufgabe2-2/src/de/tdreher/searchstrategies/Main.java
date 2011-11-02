@@ -1,13 +1,14 @@
 package de.tdreher.searchstrategies;
 
+import de.tdreher.searchstrategies.problems.ProblemSolver;
+import de.tdreher.searchstrategies.problems.SokobanProblemA;
+import de.tdreher.searchstrategies.strategies.BreadthFirstTreeSearch;
+
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ProblemSolver ps = new ProblemSolver(new SokobanProblemA(), new BreadthFirstTreeSearch());
+		System.out.println(ps.run());
 	}
 
 }

@@ -59,18 +59,36 @@ public class Node {
 	}
 
 	/**
-	 * Create and return children nodes for all possible actions
-	 * @param actions All possible actions in a linked list
+	 * Create and return children nodes for one possible actions
+	 * @param action One possible actions in a linked list
 	 * @return children of this node
 	 */
-	LinkedList<Node> expand(LinkedList<String> actions) {
+	Node expand(String action) {
+		Node child = null;
 		if(state != null) {
-			for(String action : actions) {
-				State newState = state.expand(action);
-				Node child = new Node(newState,this,action,depth+1,pathCost);
-				childrenNodes.add(child);
+			State newState = state.expand(action);
+			if(newState == null) {
+				return null; // action not possible
 			}
+			// if this is a root change the pathCost for the child
+			if(pathCost == 0 && parentNode == null) {
+				// create child
+				child = new Node(newState,this,action,depth+1,1);
+			} else {
+				// create child
+				child = new Node(newState,this,action,depth+1,pathCost);
+			}
+			childrenNodes.add(child);
 		}
-		return childrenNodes;
+		return child;
+	}
+	
+	/**
+	 * Check if the state if this node is equal to another state
+	 * @param s The other state to check
+	 * @return true or false
+	 */
+	public boolean isEqual(State s) {
+		return state.isEqual(s);
 	}
 }

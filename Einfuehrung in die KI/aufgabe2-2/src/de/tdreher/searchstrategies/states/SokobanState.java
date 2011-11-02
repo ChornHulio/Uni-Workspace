@@ -10,13 +10,14 @@ import de.tdreher.searchstrategies.exceptions.ExceptionSokobanNoFigur;
  */
 public class SokobanState implements State {
 	
-	private final int FREE_FIELD = 0;
-	private final int FIGUR = 1;
-	private final int BOX = 2;
-	private final int TARGET_FIELD = 3;
-	private final int FIGUR_ON_TARGET_FIELD = 4;
-	private final int BOX_ON_TARGET = 5;
-	private final int WALL = 6; // only used for graphical presentation
+	public final static int FREE_FIELD = 0;
+	public final static int FIGUR = 1;
+	public final static int BOX = 2;
+	public final static int TARGET_FIELD = 3;
+	public final static int FIGUR_ON_TARGET_FIELD = 4;
+	public final static int BOX_ON_TARGET = 5;
+	public final static int WALL = 6; // only used for graphical presentation
+	public final static int DONT_CARE = 9; // used for target state
 	
 	/**
 	 * 2D-field with walls, the figur, boxes, free fields and target fields 
@@ -66,7 +67,9 @@ public class SokobanState implements State {
 			for(int j = 0; j < field[i].length; j++) {
 				try {
 					if(field[i][j] != sField[i][j]) {
-						return false;
+						if(field[i][j] != DONT_CARE || sField[i][j] != DONT_CARE) {
+							return false;
+						}
 					}
 				} catch(IndexOutOfBoundsException e) {
 					return false; // sField has not everytime the same length as field
