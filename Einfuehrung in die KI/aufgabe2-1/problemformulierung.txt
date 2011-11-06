@@ -1,6 +1,4 @@
 Sokoban-Spiel-Problemformulierung
-Bearbeiter: Tobias Dreher, Dimitrij Zharkov
-Datum: 30.10.2011
 
 *** Zustände ***
 Beschreibung der Lage der 
@@ -13,13 +11,7 @@ eines Algorithmus, lediglich für die grafische Darstellung. In der Implementier
 (Aufgabe2-2) werden Wände somit auch als Zustandsmerkmale gespeichert.
 
 *** Aktionen ***
-Verschieben der Spielfigur von Feld A auf Feld B, wobei gilt:
-	- das Feld hinter B aus Sicht von Feld A wird Feld C genannt
-	- ist B ein freies Feld, geht Spielfigur von A auf B
-	- ist auf B eine Kiste und ...
-		- C ein freies Feld oder ein Zielfeld, wird B auf C geschoben und die Spielfigur geht auf B
-		- C kein freies Feld oder Zielfeld, geht dieser Spielzug nicht
-	- ist B kein freies Feld, Zielfeld oder Kiste, geht dieser Spielzug nicht
+Verschieben der Spielfigur nach links, rechts, oben und unten
 
 *** Ziel ***
 Alle Kisten befinden sich auf je einem Zielfeld

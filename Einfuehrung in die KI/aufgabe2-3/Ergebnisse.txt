@@ -1,4 +1,4 @@
-Die komplette Implementierung wurde schon für Aufgabe2-2 vorgenommen.
+(Die komplette Implementierung wurde schon in Aufgabe2-2 vorgenommen)
 
 ################################################################################
 ## Ergebnisse:                                                                ##
