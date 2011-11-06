@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import de.tdreher.searchstrategies.states.State;
 
-public class DepthFirstTreeSearch implements Strategy {
+public class DepthTreeSearch implements Strategy {
 
 	private LinkedList<Node> stack = new LinkedList<Node>(); 
 	private LinkedList<State> targetStates = null;

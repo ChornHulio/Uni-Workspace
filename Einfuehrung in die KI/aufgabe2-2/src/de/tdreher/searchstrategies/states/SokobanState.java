@@ -93,8 +93,8 @@ public class SokobanState implements State {
 					x = i;
 					y = j;
 					// break for-loops
-					j = field[i].length;
-					i = field.length;					
+					j = field.length;
+					break;
 				}
 			}
 		}

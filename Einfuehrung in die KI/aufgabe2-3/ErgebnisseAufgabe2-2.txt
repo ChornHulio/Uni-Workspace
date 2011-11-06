@@ -1,0 +1,32 @@
+Die komplette Implementierung wurde schon für Aufgabe2-2 vorgenommen.
+
+################################################################################
+## Ergebnisse:                                                                ##
+################################################################################
+Testsystem: Core2Duo, 2 x 2,53 Ghz, 4 GB Ram, Ubuntu 10.04 64 Bit, OpenJDK 1.6
+
+                          | Problem | Zeitbedarf (ms) | Speicherbedarf (geschätzt)
+                          |---------|-----------------|-----------------------------------
+             Breitensuche |    A    |        20       | niedrig               
+                          |    B    |      7718       | hoch           
+              Tiefensuche |    A    |         -       | wenn nicht beschränkt -> OutOfMem               
+                          |    B    |         -       | wenn nicht beschränkt -> OutOfMem               
+  Tiefenbeschränkte Suche |    A    |         3       | sehr niedrig
+                          |    B    |      8270       | mittel         
+    Iterierte Tiefensuche |    A    |         3       | sehr niedrig               
+                          |    B    |      1982       | mittel
+                          
+Mit dem Problem C wird mit jeder Strategy ein OutOfMemory-Error erzeugt.
+                          
+               
+################################################################################
+## Interpretation:                                                            ##
+################################################################################
+
+Bei kleinen Suchen ist die Breitensuche gut. Allerdings ist die iterierte Tiefen-
+suche auf Grund des geringeren Speicherverbrauchs auch deutlich schneller.
+
+Die Tiefensuche und die tiefenbeschränkte Suche sind nicht gut, da sie nicht 
+vollständig und optimal sind. Ohne einen Eingriff bei der Tiefensuche, wird ein
+OutOfMemory-Error erzeugt, da er bei den genannten Problemen Endlosschleifen 
+erzeugt. Dies ist aber Problem- und Implementierungsabhängig.
