@@ -7,12 +7,13 @@ import de.tdreher.searchstrategies.states.State;
 public class BreadthFirstTreeSearch implements Strategy {
 	
 	private LinkedList<Node> queue = new LinkedList<Node>(); 
-	LinkedList<State> targetStates = null;
-	LinkedList<String> actions = null;
+	private LinkedList<State> targetStates = null;
+	private LinkedList<String> actions = null;
+	private int limit = -1; // on default this strategy has no depth-limit
 
 	@Override
 	public void setStartState(State s) {
-		this.queue.add(new Node(s,null,"",0,0));
+		this.queue.add(new Node(s,null,"",0,0,1));
 	}
 
 	@Override
@@ -28,7 +29,8 @@ public class BreadthFirstTreeSearch implements Strategy {
 
 	@Override
 	public void setLimit(int limit) {
-		return; // this search strategy doesn't use a limit
+		// on default this strategy has no depth-limit - but if you want, you get one
+		this.limit = limit;
 	}
 
 	@Override
@@ -43,9 +45,18 @@ public class BreadthFirstTreeSearch implements Strategy {
 			queue.removeFirst(); // remove this first element of the queue
 			for(State targetState : targetStates) {
 				if(n.isEqual(targetState)) {
-					return "juhuu"; // TODO solution found - concat a string
+					// solution found - now go back to concat the path
+					return n.concatPath("");
 				}
 			}
+			
+			//n.printState();
+			
+			// is the depth limit reached, then don't expand the node
+			if(limit >= 0 && limit <= n.getDepth()) {
+				continue;
+			}
+			
 			// expand for all possible actions
 			for(String action : actions) {
 				Node child = n.expand(action);
@@ -53,7 +64,6 @@ public class BreadthFirstTreeSearch implements Strategy {
 					queue.add(child);
 				}
 			}
-			System.out.println(queue.size());
 		}
 		return "No solution found";
 	}

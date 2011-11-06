@@ -22,12 +22,12 @@ public class SokobanState implements State {
 	/**
 	 * 2D-field with walls, the figur, boxes, free fields and target fields 
 	 * 
-	 *  +-----------------> x
+	 *  +-----------------> y
 	 *  |[0/0] [1/0] [2/0]
-	 *  |[0/1] [1/1] [2/1]      --> field[x][y]
+	 *  |[0/1] [1/1] [2/1]      --> field[y][x]
 	 *  |[0/2] [1/2] [2/2]
 	 *  V
-	 *  y 
+	 *  x 
 	 */
 	private int[][] field = null;
 	
@@ -55,7 +55,7 @@ public class SokobanState implements State {
 		}
 		
 		// get field
-		int[][] sField = sState.getField();
+		int[][] sField = sState.field;
 		
 		// compare lengths
 		if(field.length != sField.length || field[0].length != sField[0].length) {
@@ -67,7 +67,7 @@ public class SokobanState implements State {
 			for(int j = 0; j < field[i].length; j++) {
 				try {
 					if(field[i][j] != sField[i][j]) {
-						if(field[i][j] != DONT_CARE || sField[i][j] != DONT_CARE) {
+						if(field[i][j] != DONT_CARE && sField[i][j] != DONT_CARE) {
 							return false;
 						}
 					}
@@ -82,263 +82,103 @@ public class SokobanState implements State {
 		
 	}
 
-	private int[][] getField() {
-		return field;
-	}
-
 	@Override
 	public State expand(String action) {
+		// position of figur
+		int x = -1;
+		int y = -1;
+		for(int j = 0; j < field.length; j++) {
+			for(int i = 0; i < field[j].length; i++) {
+				if(field[j][i] == FIGUR || field[j][i] == FIGUR_ON_TARGET_FIELD) {
+					x = i;
+					y = j;
+					// break for-loops
+					j = field[i].length;
+					i = field.length;					
+				}
+			}
+		}
+		if(x < 0 || y < 0) {
+			throw new ExceptionSokobanNoFigur("No figur is found in the hole field");
+		}
+		
+		// interpret action
 		if(action.equals("up")) {
-			return actionUp();			
+			return doAction(x, y, x, y-1, x, y-2);			
 		} else if(action.equals("right")) {
-			return actionRight();	
+			return doAction(x, y, x+1, y, x+2, y);	
 		} else if(action.equals("down")) {
-			return actionDown();
+			return doAction(x, y, x, y+1, x, y+2);	
 		} else if(action.equals("left")) {
-			return actionLeft();
+			return doAction(x, y, x-1, y, x-2, y);	
 		} else {
 			return null;
 		}
 	}
 	
 	/**
-	 * Check if the figur can go one step upward
+	 * Check if the figur can go one step 
+	 * @param x The x-coordinate of the figur
+	 * @param y The y-coordinate of the figur
+	 * @param x1 First step towards the direction of the action (x-coordinate)
+	 * @param y1 First step towards the direction of the action (y-coordinate)
+	 * @param x2 Second step towards the direction of the action (x-coordinate)
+	 * @param y2 Second step towards the direction of the action (y-coordinate)
 	 * @return The new state (copied and changed this object)
 	 */
-	private State actionUp() {
+	private State doAction(int x, int y, int x1, int y1, int x2, int y2) {
 		// init a new state with the field of this state
 		SokobanState newState = new SokobanState(field);
 		
-		// position of figur
-		int[] figur = givePositionOfFigur();
-		int x = figur[0];
-		int y = figur[1];
-		
-		// if there is enough space for one step up
-		if( y >= 1 ) { 
-			// if there is a free field or a target field -> move up
-			if(field[x][y-1] == FREE_FIELD || field[x][y-1] == TARGET_FIELD) {
-				// set new value for [x][y]
-				if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
+		// if there is enough space for one step
+		if( x1 >= 0 && x1 < field[0].length && y1 >= 0 && y1 < field.length ) { 
+			// if there is a free field or a target field -> move
+			if(field[y1][x1] == FREE_FIELD || field[y1][x1] == TARGET_FIELD) {
+				// set new value for [y][x]
+				if(field[y][x] == FIGUR_ON_TARGET_FIELD) {
 					newState.changeField(x, y, TARGET_FIELD);
 				} else {
 					newState.changeField(x, y, FREE_FIELD);
 				}
-				// set new value for [x][y-1]
-				if(field[x][y-1] == TARGET_FIELD) {
-					newState.changeField(x, y-1, FIGUR_ON_TARGET_FIELD);
+				// set new value for [y1][x1]
+				if(field[y1][x1] == TARGET_FIELD) {
+					newState.changeField(x1, y1, FIGUR_ON_TARGET_FIELD);
 				} else {
-					newState.changeField(x, y-1, FIGUR);
+					newState.changeField(x1, y1, FIGUR);
 				}
 				return newState;
 			}
 		} 
 		
-		// if there is enough space for two steps up
-		if( y >= 2 ) { 
+		// if there is enough space for two steps
+		if( x2 >= 0 && x2 < field[0].length && y2 >= 0 && y2 < field.length ) { 
 			// if there is a box
-			if(field[x][y-1] == BOX || field[x][y-1] == BOX_ON_TARGET) {
-				// if there is a free field or target field -> push it and move up
-				if(field[x][y-2] == FREE_FIELD || field[x][y-2] == TARGET_FIELD) {
-					// set new value for [x][y]
-					if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
+			if(field[y1][x1] == BOX || field[y1][x1] == BOX_ON_TARGET) {
+				// if there is a free field or target field -> push it and move
+				if(field[y2][x2] == FREE_FIELD || field[y2][x2] == TARGET_FIELD) {
+					// set new value for [y][x]
+					if(field[y][x] == FIGUR_ON_TARGET_FIELD) {
 						newState.changeField(x, y, TARGET_FIELD);
 					} else {
 						newState.changeField(x, y, FREE_FIELD);
 					}
-					// set new value for [x][y-1]
-					if(field[x][y-1] == BOX_ON_TARGET) {
-						newState.changeField(x, y-1, FIGUR_ON_TARGET_FIELD);
+					// set new value for [x1][y1]
+					if(field[y1][x1] == BOX_ON_TARGET) {
+						newState.changeField(x1, y1, FIGUR_ON_TARGET_FIELD);
 					} else {
-						newState.changeField(x, y-1, FIGUR);
+						newState.changeField(x1, y1, FIGUR);
 					}
-					// set new value for [x][y-2]
-					if(field[x][y-2] == TARGET_FIELD) {
-						newState.changeField(x, y-2, BOX_ON_TARGET);
+					// set new value for [y2][x2]
+					if(field[y2][x2] == TARGET_FIELD) {
+						newState.changeField(x2, y2, BOX_ON_TARGET);
 					} else {
-						newState.changeField(x, y-2, BOX);
+						newState.changeField(x2, y2, BOX);
 					}
+					return newState;
 				}
 			}
 		} 
-		return null; // There is no step up possible (e.g. in cause of a wall)
-	}
-	
-	private State actionRight() {
-		// init a new state with the field of this state
-		SokobanState newState = new SokobanState(field);
-		
-		// position of figur
-		int[] figur = givePositionOfFigur();
-		int x = figur[0];
-		int y = figur[1];
-		
-		// if there is enough space for one step up
-		if( x >= field.length-1 ) { 
-			// if there is a free field or a target field -> move up
-			if(field[x+1][y] == FREE_FIELD || field[x+1][y] == TARGET_FIELD) {
-				// set new value for [x][y]
-				if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-					newState.changeField(x, y, TARGET_FIELD);
-				} else {
-					newState.changeField(x, y, FREE_FIELD);
-				}
-				// set new value for [x+1][y]
-				if(field[x+1][y] == TARGET_FIELD) {
-					newState.changeField(x+1, y, FIGUR_ON_TARGET_FIELD);
-				} else {
-					newState.changeField(x+1, y, FIGUR);
-				}
-				return newState;
-			}
-		} 
-		
-		// if there is enough space for two steps up
-		if( x >= field.length-2 ) { 
-			// if there is a box
-			if(field[x+1][y] == BOX || field[x+1][y] == BOX_ON_TARGET) {
-				// if there is a free field or target field -> push it and move up
-				if(field[x+2][y] == FREE_FIELD || field[x+2][y] == TARGET_FIELD) {
-					// set new value for [x][y]
-					if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-						newState.changeField(x, y, TARGET_FIELD);
-					} else {
-						newState.changeField(x, y, FREE_FIELD);
-					}
-					// set new value for [x+1][y]
-					if(field[x+1][y] == BOX_ON_TARGET) {
-						newState.changeField(x+1, y, FIGUR_ON_TARGET_FIELD);
-					} else {
-						newState.changeField(x+1, y, FIGUR);
-					}
-					// set new value for [x+2][y]
-					if(field[x+2][y] == TARGET_FIELD) {
-						newState.changeField(x+2, y, BOX_ON_TARGET);
-					} else {
-						newState.changeField(x+2, y, BOX);
-					}
-				}
-			}
-		} 		
-		return null; // There is no step up possible (e.g. in cause of a wall)
-	}
-	
-	private State actionDown() {
-		// init a new state with the field of this state
-		SokobanState newState = new SokobanState(field);
-		
-		// position of figur
-		int[] figur = givePositionOfFigur();
-		int x = figur[0];
-		int y = figur[1];
-		
-		// if there is enough space for one step up
-		if( y < field[0].length-1 ) { 
-			// if there is a free field or a target field -> move up
-			if(field[x][y+1] == FREE_FIELD || field[x][y+1] == TARGET_FIELD) {
-				// set new value for [x][y]
-				if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-					newState.changeField(x, y, TARGET_FIELD);
-				} else {
-					newState.changeField(x, y, FREE_FIELD);
-				}
-				// set new value for [x][y+1]
-				if(field[x][y+1] == TARGET_FIELD) {
-					newState.changeField(x, y+1, FIGUR_ON_TARGET_FIELD);
-				} else {
-					newState.changeField(x, y+1, FIGUR);
-				}
-				return newState;
-			}
-		} 
-		
-		// if there is enough space for two steps up
-		if( y < field[0].length-2 ) { 
-			// if there is a box
-			if(field[x][y+1] == BOX || field[x][y+1] == BOX_ON_TARGET) {
-				// if there is a free field or target field -> push it and move up
-				if(field[x][y+2] == FREE_FIELD || field[x][y+2] == TARGET_FIELD) {
-					// set new value for [x][y]
-					if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-						newState.changeField(x, y, TARGET_FIELD);
-					} else {
-						newState.changeField(x, y, FREE_FIELD);
-					}
-					// set new value for [x][y+1]
-					if(field[x][y+1] == BOX_ON_TARGET) {
-						newState.changeField(x, y+1, FIGUR_ON_TARGET_FIELD);
-					} else {
-						newState.changeField(x, y+1, FIGUR);
-					}
-					// set new value for [x][y+2]
-					if(field[x][y+2] == TARGET_FIELD) {
-						newState.changeField(x, y+2, BOX_ON_TARGET);
-					} else {
-						newState.changeField(x, y+2, BOX);
-					}
-				}
-			}
-		} 		
-		return null; // There is no step up possible (e.g. in cause of a wall)
-	}
-	
-	private State actionLeft() {
-		// init a new state with the field of this state
-		SokobanState newState = new SokobanState(field);
-		
-		// position of figur
-		int[] figur = givePositionOfFigur();
-		int x = figur[0];
-		int y = figur[1];
-		
-		// if there is enough space for one step up
-		if( x >= 1 ) { 
-			// if there is a free field or a target field -> move up
-			if(field[x-1][y] == FREE_FIELD || field[x-1][y] == TARGET_FIELD) {
-				// set new value for [x][y]
-				if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-					newState.changeField(x, y, TARGET_FIELD);
-				} else {
-					newState.changeField(x, y, FREE_FIELD);
-				}
-				// set new value for [x-1][y]
-				if(field[x-1][y] == TARGET_FIELD) {
-					newState.changeField(x-1, y, FIGUR_ON_TARGET_FIELD);
-				} else {
-					newState.changeField(x-1, y, FIGUR);
-				}
-				return newState;
-			}
-		} 
-		
-		// if there is enough space for two steps up
-		if( x >= 2 ) { 
-			// if there is a box
-			if(field[x-1][y] == BOX || field[x-1][y] == BOX_ON_TARGET) {
-				// if there is a free field or target field -> push it and move up
-				if(field[x-2][y] == FREE_FIELD || field[x-2][y] == TARGET_FIELD) {
-					// set new value for [x][y]
-					if(field[x][y] == FIGUR_ON_TARGET_FIELD) {
-						newState.changeField(x, y, TARGET_FIELD);
-					} else {
-						newState.changeField(x, y, FREE_FIELD);
-					}
-					// set new value for [x-1][y]
-					if(field[x-1][y] == BOX_ON_TARGET) {
-						newState.changeField(x-1, y, FIGUR_ON_TARGET_FIELD);
-					} else {
-						newState.changeField(x-1, y, FIGUR);
-					}
-					// set new value for [x-2][y]
-					if(field[x-2][y] == TARGET_FIELD) {
-						newState.changeField(x-2, y, BOX_ON_TARGET);
-					} else {
-						newState.changeField(x-2, y, BOX);
-					}
-				}
-			}
-		} 		
-		return null; // There is no step up possible (e.g. in cause of a wall)
+		return null; // There is no step possible (e.g. in cause of a wall)
 	}
 	
 	/**
@@ -348,18 +188,16 @@ public class SokobanState implements State {
 	 * @param fieldState the new state of the field
 	 */
 	public void changeField(int x, int y, int fieldState) {
-		field[x][y] = fieldState;
+		field[y][x] = fieldState;
 	}
 	
-	private int[] givePositionOfFigur() {
+	@Override
+	public void printState() {
 		for(int i = 0; i < field.length; i++) {
 			for(int j = 0; j < field[i].length; j++) {
-				if(field[i][j] == FIGUR || field[i][j] == FIGUR_ON_TARGET_FIELD) {
-					int[] position = {i, j};
-					return position;
-				}
+				System.out.print(field[i][j]);
 			}
+			System.out.println();
 		}
-		throw new ExceptionSokobanNoFigur("No figur is found in the hole field");
 	}
 }

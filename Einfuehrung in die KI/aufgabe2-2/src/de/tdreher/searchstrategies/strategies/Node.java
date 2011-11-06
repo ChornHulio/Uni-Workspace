@@ -25,7 +25,7 @@ public class Node {
 	 * The action which causes this node
 	 */
 	private String action = "";
-	
+
 	/**
 	 * The depth in the search tree
 	 */
@@ -43,19 +43,33 @@ public class Node {
 	private LinkedList<Node> childrenNodes = new LinkedList<Node>();
 	
 	/**
+	 * Node ID - this id is only unique in combinition
+	 * with the depth of a node
+	 * 
+	 *            (depth / id)
+	 *                  0/1
+	 *         1/1              1/2
+	 *     2/1     2/2      2/3     2/4
+	 * 
+	 */
+	private int nodeID = 0;
+	
+	/**
 	 * Constructor of this class
 	 * @param s The state of this node
 	 * @param parent The parent node of this node
 	 * @param action The action which causes this node
 	 * @param depth The depth in the search tree
 	 * @param cost The path cost which causes the action of this node
+	 * @param nodeID The id of this node
 	 */
-	public Node(State s, Node parent, String action, int depth, int cost) {
+	public Node(State s, Node parent, String action, int depth, int cost, int nodeID) {
 		this.state = s;
 		this.parentNode = parent;
 		this.action = action;
 		this.depth = depth;
 		this.pathCost = cost;
+		this.nodeID = nodeID;
 	}
 
 	/**
@@ -73,10 +87,10 @@ public class Node {
 			// if this is a root change the pathCost for the child
 			if(pathCost == 0 && parentNode == null) {
 				// create child
-				child = new Node(newState,this,action,depth+1,1);
+				child = new Node(newState,this,action,depth+1,1,childrenNodes.size());
 			} else {
 				// create child
-				child = new Node(newState,this,action,depth+1,pathCost);
+				child = new Node(newState,this,action,depth+1,pathCost,childrenNodes.size());
 			}
 			childrenNodes.add(child);
 		}
@@ -90,5 +104,33 @@ public class Node {
 	 */
 	public boolean isEqual(State s) {
 		return state.isEqual(s);
+	}
+	
+	public String getAction() {
+		return action;
+	}
+	
+	public void printState() {
+		System.out.println("------- " + depth + "/" + nodeID + " -------");
+		state.printState();
+	}
+	
+	public int getDepth() {
+		return depth;
+	}
+
+	/**
+	 * Concat the path to the solution (backwards)
+	 * @param path The path from the target backwards to this node
+	 * @return the complete path (recursive)
+	 */
+	public String concatPath(String path) {
+		if(parentNode != null && path.isEmpty()) {
+			return parentNode.concatPath(action);
+		} else if(parentNode != null) {
+			return parentNode.concatPath(action + " / " + path);
+		} else {
+			return "Solution: " + path;
+		}
 	}
 }

@@ -20,4 +20,10 @@ public interface State {
 	 * @return the subsequent state for the given action
 	 */
 	State expand(String action);
+	
+	/**
+	 * Print the hole state space on sysout. This method is only for testing 
+	 * purposes.
+	 */
+	public void printState();
 }
