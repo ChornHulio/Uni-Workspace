@@ -2,8 +2,8 @@ package de.tdreher.searchstrategies.problems;
 
 import java.util.LinkedList;
 
-import de.tdreher.searchstrategies.states.State;
 import de.tdreher.searchstrategies.states.SokobanState;
+import de.tdreher.searchstrategies.states.State;
 
 public class SokobanProblemA implements Problem {
 

@@ -4,16 +4,16 @@ import java.util.LinkedList;
 
 import de.tdreher.searchstrategies.states.State;
 
-public class BreadthFirstTreeSearch implements Strategy {
-	
-	private LinkedList<Node> queue = new LinkedList<Node>(); 
+public class DepthFirstTreeSearch implements Strategy {
+
+	private LinkedList<Node> stack = new LinkedList<Node>(); 
 	private LinkedList<State> targetStates = null;
 	private LinkedList<String> actions = null;
 	private int limit = -1; // on default this strategy has no depth-limit
 
 	@Override
 	public void setStartState(State s) {
-		this.queue.add(new Node(s,null,"",0,0,1));
+		this.stack.add(new Node(s,null,"",0,0,1));
 	}
 
 	@Override
@@ -35,14 +35,14 @@ public class BreadthFirstTreeSearch implements Strategy {
 
 	@Override
 	public String run() {
-		if(queue.isEmpty() || targetStates == null) {
+		if(stack.isEmpty() || targetStates == null) {
 			throw new IllegalArgumentException("No start and target states defined");
 		}
 		
 		// search
-		while(!queue.isEmpty()) {
-			Node n = queue.getFirst(); // get first element of the queue
-			queue.removeFirst(); // remove this first element of the queue
+		while(!stack.isEmpty()) {
+			Node n = stack.getFirst(); // get first element of the queue
+			stack.removeFirst(); // remove this first element of the queue
 			for(State targetState : targetStates) {
 				if(n.isEqual(targetState)) {
 					// solution found - now go back to concat the path
@@ -59,7 +59,7 @@ public class BreadthFirstTreeSearch implements Strategy {
 			for(String action : actions) {
 				Node child = n.expand(action);
 				if(child != null) {
-					queue.add(child);
+					stack.addFirst(child);
 				}
 			}
 		}
