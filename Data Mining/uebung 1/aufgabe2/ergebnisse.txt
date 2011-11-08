@@ -1,0 +1,8 @@
+Modalwert: 4
+Median: 4
+1/5-Quantil: 2
+Arithmetischer Mittelwert: 3,653061
+Spannweite: 7
+Interquartilbereich: 2
+Varianz: 3.314626
+Standardabweichung: 1.820611

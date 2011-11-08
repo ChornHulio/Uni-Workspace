@@ -1,0 +1,1 @@
+Korrelationskoeffizient r_xy: -0.860932
