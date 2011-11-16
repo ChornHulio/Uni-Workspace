@@ -32,7 +32,8 @@ public class Node {
 	private int depth = 0;
 	
 	/**
-	 * The path cost which causes the action of this node
+	 * The path cost which causes the action of this node from the parent node 
+	 * to this node
 	 */
 	private int pathCost = 0;
 	
@@ -131,6 +132,22 @@ public class Node {
 			return parentNode.concatPath(action + " / " + path);
 		} else {
 			return "Solution: " + path;
+		}
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	/**
+	 * Summarize the costs of the path from the root till this node
+	 * @return the costs
+	 */
+	public int getCosts() {
+		if(parentNode == null) {
+			return pathCost;
+		} else {
+			return pathCost + parentNode.getCosts();
 		}
 	}
 }

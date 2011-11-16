@@ -1,8 +1,8 @@
 package de.tdreher.searchstrategies;
 
-import de.tdreher.searchstrategies.problems.NumberPuzzleProblemA;
-import de.tdreher.searchstrategies.problems.ProblemSolver;
-import de.tdreher.searchstrategies.strategies.IterativeDepthTreeSearch;
+import de.tdreher.searchstrategies.heuristics.*;
+import de.tdreher.searchstrategies.problems.*;
+import de.tdreher.searchstrategies.strategies.*;
 
 public class Main {
 
@@ -11,17 +11,87 @@ public class Main {
 		long ms = 0; // milliseconds for stopwatch
 		ProblemSolver ps = null; // the solver
 		
+		/* *************************** PROBLEM A *************************** */
+		
 		// Breadth First - TreeSearch
-		/*ps = new ProblemSolver(new NumberPuzzleProblemA(), new BreadthFirstTreeSearch());
+		ps = new ProblemSolver(	new NumberPuzzleProblemA(), 
+								new BreadthFirstTreeSearch());
 		ms = System.currentTimeMillis();
-		System.out.println("(A / Breadth First) " + ps.run());
-		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms));*/
+		System.out.println("(Problem A | Breadth First)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
 		
 		// Iterative Depth - TreeSearch
-		ps = new ProblemSolver(new NumberPuzzleProblemA(), new IterativeDepthTreeSearch());
+		ps = new ProblemSolver(	new NumberPuzzleProblemA(), 
+								new IterativeDepthTreeSearch());
 		ms = System.currentTimeMillis();
-		System.out.println("(A / Iterative Depth) " + ps.run());
-		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms));
+		System.out.println("(Problem A | Iterative Depth)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// Greedy Search - Heuristic A
+		ps = new ProblemSolver(		new NumberPuzzleProblemA(), 
+		 							new GreedyTreeSearch(), 
+		 							new NumberPuzzleHeuristicA());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem A | Greedy Search | Heuristic A)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// Greedy Search - Heuristic B
+		ps = new ProblemSolver(		new NumberPuzzleProblemA(), 
+		 							new GreedyTreeSearch(), 
+		 							new NumberPuzzleHeuristicB());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem A | Greedy Search | Heuristic B)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// A* Search - Heuristic A
+		ps = new ProblemSolver(	new NumberPuzzleProblemA(), 
+								new AStarTreeSearch(), 
+								new NumberPuzzleHeuristicA());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem A | A* Search | Heuristic A)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// A* Search - Heuristic B
+		ps = new ProblemSolver(	new NumberPuzzleProblemA(), 
+								new AStarTreeSearch(), 
+								new NumberPuzzleHeuristicB());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem A | A* Search | Heuristic B)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		/* *************************** PROBLEM B *************************** */
+		
+		// Breadth First - TreeSearch
+		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
+								new BreadthFirstTreeSearch());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem B | Breadth First)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// Iterative Depth - TreeSearch
+		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
+								new IterativeDepthTreeSearch());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem B | Iterative Depth)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// Greedy Search - doesn't solve the problem
+		
+		// A* Search - Heuristic A
+		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
+								new AStarTreeSearch(), 
+								new NumberPuzzleHeuristicA());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem B | A* Search | Heuristic A)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		// A* Search - Heuristic B
+		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
+								new AStarTreeSearch(), 
+								new NumberPuzzleHeuristicB());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem B | A* Search | Heuristic B)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
 	}
 
 }

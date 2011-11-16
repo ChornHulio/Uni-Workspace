@@ -2,6 +2,7 @@ package de.tdreher.searchstrategies.strategies;
 
 import java.util.LinkedList;
 
+import de.tdreher.searchstrategies.heuristics.Heuristic;
 import de.tdreher.searchstrategies.states.State;
 
 public class BreadthFirstTreeSearch implements Strategy {
@@ -31,6 +32,11 @@ public class BreadthFirstTreeSearch implements Strategy {
 	public void setLimit(int limit) {
 		// on default this strategy has no depth-limit - but if you want, you get one
 		this.limit = limit;
+	}
+	
+	@Override
+	public void setHeuristic(Heuristic heuristic) {
+		// Not needed		
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class NumberPuzzleState implements State {
 	 *   
 	 */
 	private int[] field = null;
-	
+
 	/**
 	 * Length of the 2D-Field 
 	 */
@@ -94,7 +94,7 @@ public class NumberPuzzleState implements State {
 
 	@Override
 	public void printState() {
-		for(int i = 0; i < field.length; i++) {
+		for(int i = 0; i < field.length; i+=length) {
 			for(int j = 0; j < length; j++) {
 				System.out.print(field[i]+"\t");
 			}
@@ -113,5 +113,8 @@ public class NumberPuzzleState implements State {
 		field[x1] = field[x2];
 		field[x2] = tmp;
 	}
-
+	
+	public int[] getField() {
+		return field;
+	}
 }

@@ -2,6 +2,7 @@ package de.tdreher.searchstrategies.strategies;
 
 import java.util.LinkedList;
 
+import de.tdreher.searchstrategies.heuristics.Heuristic;
 import de.tdreher.searchstrategies.states.State;
 
 public class IterativeDepthTreeSearch implements Strategy {
@@ -30,6 +31,11 @@ public class IterativeDepthTreeSearch implements Strategy {
 	@Override
 	public void setLimit(int limit) {
 		// this strategy has no depth-limit
+	}
+	
+	@Override
+	public void setHeuristic(Heuristic heuristic) {
+		// Not needed		
 	}
 
 	@Override

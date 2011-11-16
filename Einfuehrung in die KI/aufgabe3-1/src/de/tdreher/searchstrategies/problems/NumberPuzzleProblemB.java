@@ -3,14 +3,13 @@ package de.tdreher.searchstrategies.problems;
 import java.util.LinkedList;
 
 import de.tdreher.searchstrategies.states.NumberPuzzleState;
-import de.tdreher.searchstrategies.states.SokobanState;
 import de.tdreher.searchstrategies.states.State;
 
-public class NumberPuzzleProblemA implements Problem {
+public class NumberPuzzleProblemB implements Problem {
 
 	@Override
 	public State getStartState() {
-		int[] field = {3,1,2,4,7,5,NumberPuzzleState.FREE,6,8 };
+		int[] field = {1,5,4,6,2,8,7,NumberPuzzleState.FREE,3 };
 		return new NumberPuzzleState(field);
 	}
 

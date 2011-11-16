@@ -1,0 +1,25 @@
+#############################
+# Problem A (sehr einfach)
+
+        Strategie       | Durchlaufzeit
+  ----------------------|--------------
+  Breitensuche          |   3 ms   
+  Iterierte Tiefensuche |   1 ms
+  Gierige Suche (h1)    | < 1 ms
+  Gierige Suche (h2)    | < 1 ms
+  A* Suche (h1)         | < 1 ms
+  A* Suche (h2)         | < 1 ms
+
+
+
+#############################
+# Problem B (schwierig)
+
+        Strategie       | Durchlaufzeit
+  ----------------------|--------------
+  Breitensuche          |   5861 ms   
+  Iterierte Tiefensuche |   1959 ms
+  Gierige Suche (h1)    | unendlich (da nicht vollständig!)
+  Gierige Suche (h2)    | unendlich (da nicht vollständig!)
+  A* Suche (h1)         |    253 ms
+  A* Suche (h2)         |      8 ms

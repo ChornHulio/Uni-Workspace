@@ -2,10 +2,11 @@ package de.tdreher.searchstrategies.strategies;
 
 import java.util.LinkedList;
 
+import de.tdreher.searchstrategies.heuristics.Heuristic;
 import de.tdreher.searchstrategies.states.State;
 
 /**
- * Interface for every strategy
+ * Interface for any strategy
  * @author tdreher
  * @date 2011-11-02
  */
@@ -35,6 +36,12 @@ public interface Strategy {
 	 * @param limit A limit
 	 */
 	public void setLimit(int limit);
+	
+	/**
+	 * Set a heuristic if its needed
+	 * @param heuristic A heuristic
+	 */
+	public void setHeuristic(Heuristic heuristic);
 	
 	/**
 	 * Run the search strategy
