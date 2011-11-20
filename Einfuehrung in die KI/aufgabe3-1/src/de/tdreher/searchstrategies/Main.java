@@ -58,17 +58,12 @@ public class Main {
 		ms = System.currentTimeMillis();
 		System.out.println("(Problem A | A* Search | Heuristic B)\n\t\t" + ps.run());
 		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
-		
+	
 		/* *************************** PROBLEM B *************************** */
 		
-		// Breadth First - TreeSearch
-		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
-								new BreadthFirstTreeSearch());
-		ms = System.currentTimeMillis();
-		System.out.println("(Problem B | Breadth First)\n\t\t" + ps.run());
-		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		// Breadth First - TreeSearch - needs to much memory on a few systems
 		
-		// Iterative Depth - TreeSearch
+		// Iterative Depth - TreeSearch 
 		ps = new ProblemSolver(	new NumberPuzzleProblemB(), 
 								new IterativeDepthTreeSearch());
 		ms = System.currentTimeMillis();
@@ -91,6 +86,16 @@ public class Main {
 								new NumberPuzzleHeuristicB());
 		ms = System.currentTimeMillis();
 		System.out.println("(Problem B | A* Search | Heuristic B)\n\t\t" + ps.run());
+		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
+		
+		/* *************************** PROBLEM C *************************** */
+		
+		// A* Search - Heuristic B
+		ps = new ProblemSolver(	new NumberPuzzleProblemC(), 
+								new AStarTreeSearch(), 
+								new NumberPuzzleHeuristicB());
+		ms = System.currentTimeMillis();
+		System.out.println("(Problem C | A* Search | Heuristic B)\n\t\t" + ps.run());
 		System.out.println("\t\tLead time: " + (System.currentTimeMillis() - ms) + "\n");
 	}
 
