@@ -1,0 +1,24 @@
+Einführung in die Künstliche Intelligenz
+Aufgabenblatt 4
+
+Bearbeiter: 
+	Andra Herta
+	Heiko Golavsek
+	Tobias Dreher
+
+#####################################
+## Aufgabe 4.1
+
+Variablen:
+	V = {X_11,X_12,...X_19,
+	     X_21,X_22,...X_29,
+	     ...
+	     X_91,X_92,...X_99}
+	     
+Wertebereiche:
+	D = {1,2,..,9} 
+	
+Constraints:
+	Zeilen-Constraints:  X_ab != X_ac    , für alle a,b,c € D, b != c
+	Spalten-Constraints: X_ba != X_ca    , für alle a,b,c € D, b != c
+	Block-Constraints:   X_(a*n)(b*n) != X_(c*n)(d*n)  , für alle a,b,c,d,n € {1..3}, a != c || b != d
