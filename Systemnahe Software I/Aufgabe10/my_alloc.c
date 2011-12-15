@@ -1,94 +1,113 @@
+/**
+ * Systemnahe Software
+ * Aufgabenblatt 7
+ * Bearbeiter: Heiko Golavsek, Andra Herta, Tobias Dreher
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "my_alloc.h"
 #include "my_system.h"
 
-#define WASTE_RATE 0.1
-#define MAX_BLOCKS 25
+#define WASTE_RATE 0.03
 
-unsigned char offset_block = 0;
-unsigned short offset_internal = 0;
 unsigned int mem_size = 0;
 unsigned int used_mem = 0;
-unsigned char used_blocks = 1;
 unsigned char found_something = 0;
-unsigned char * datablocks[MAX_BLOCKS];
+char * data_start;
+char * data_current;
+char * data_last;
+int offset = 0;
+int blocks = 1;
+int current_block = 1;
 
 void init_my_alloc ()
 {
-	datablocks[0] = get_block_from_system();
+	data_start = get_block_from_system();
 	mem_size = BLOCKSIZE;
 	// mark the memory as free
-	for(int i = 0; i < BLOCKSIZE-100; i += 1017)
-	{
-		*(datablocks[0] + i) = 0b11111110;
-	}
-	*(datablocks[0] + 8136) = 0b01101110;
+	*(data_start) = 0; // unused
+	//*(data_start+1) = (short) (BLOCKSIZE - 16); // the next 8176 bytes are unused
+	*(data_start+1) = (BLOCKSIZE - 16) / 0xFF; // ...
+	*(data_start+2) = (BLOCKSIZE - 16) % 0xFF; // the next 8176 bytes are unused
+	data_current = data_start;
+	data_last = data_start;
 }
 
 void * my_alloc (int size)
 {
 	do
 	{
-		do 
+		while (offset >= 0 && offset < (BLOCKSIZE - 8)) 
 		{
-			unsigned char status = (unsigned char) * (datablocks[offset_block] + offset_internal); // status information at the beginning of an internal block
-			printf("status: %d\n",status);
-			if(!(status % 2) && (status/2 > size/8)) // internal block is unused and big enough
+			char status = (char) * (data_current + offset);
+			unsigned short bytes = (unsigned char)*(data_current + offset + 1) * 0xFF + (unsigned char)*(data_current + offset + 2);
+			if(status == 0 && bytes > size)  // block is unused and big enough
 			{
 				found_something = 1;
 				used_mem += size;
-				unsigned char * new_status = datablocks[offset_block] + offset_internal;
-				unsigned char * ret = new_status + 1;
-				*new_status = size/4 + 1; // beginning of internal block
-				*(ret + 1) = (status/2 - size/8) + 1; // end of internal block
+				*(data_current + offset) = 1; // used
+				*(data_current + offset + 1) = size / 0xFF; // ...
+				*(data_current + offset + 2) = size % 0xFF; // the next 'size' bytes are used
+				if(bytes != size) 
+				{
+					*(data_current + offset + 8 + size) = 0; // used
+					*(data_current + offset + 9 + size) = (bytes - size) / 0xFF; // ...
+					*(data_current + offset +10 + size) = (bytes - size) % 0xFF; // the next 'x' bytes are unsed
+				}
+				void * ret = data_current + offset + 8;
+				offset += 8 + size;
 				return ret;
 			}
-			else
+			else // block is used or not big enough
 			{
-				offset_internal += 1 + ((status/2)*8);
+				offset += 8 + bytes;
+				printf("bytes: %u\n",bytes);
 			}
-		} while (offset_internal <= (BLOCKSIZE + size));
-		offset_block++; // next block
-		offset_internal = 0; // at the beginning
-	} while(offset_block <= used_blocks);
+		}
+		if(blocks <= current_block)
+		{
+			data_current = data_start; // go back to the beginning
+			found_something = 0;
+			current_block = 0;
+		}
+		else
+		{
+			data_current = (void*) data_current + (BLOCKSIZE - 8);
+			current_block++;
+		}
+	} while(found_something == 1 && (used_mem / mem_size) < WASTE_RATE);
 	
-	// no internal block of this size found
-	if(found_something == 0 || mem_size == 0 || (used_mem / mem_size) < WASTE_RATE)
-	{
-		if(used_blocks >= MAX_BLOCKS)
-		{
-			return NULL; // too much memory blocks are used
-		}
-		// get block from system
-		found_something = 0;
-		offset_internal = 0;
-		offset_block = used_blocks;
-		datablocks[used_blocks] = get_block_from_system();
-		if(datablocks[used_blocks] == NULL)
-		{
-			return NULL; // get no memory
-		}
-		mem_size += BLOCKSIZE;
-		// mark the memory as free
-		for(int i = 0; i < BLOCKSIZE-100; i += 1017)
-		{
-			*(datablocks[used_blocks] + i) = 0b11111110;
-		}
-		*(datablocks[0] + 8136) = 0b01101110;
-		used_blocks++;
-		return my_alloc(size);
-	}
-	else // there should be an internal block for this size - start at the beginning
-	{
-		found_something = 0;
-		offset_block = 0;
-		offset_internal = 0;
-		return my_alloc(size);
-	}
+	// no block of the given size found
+	found_something = 0;
+	offset = 0;
+	blocks++;
+	current_block++;
+	data_current = get_block_from_system();
+	*(data_last + (BLOCKSIZE - 8)) = data_current; //BUG
+	mem_size += BLOCKSIZE;
+	// mark the memory as free
+	*(data_current) = 0; // unused
+	*(data_current+1) = (BLOCKSIZE - 16) / 0xFF; // ...
+	*(data_current+2) = (BLOCKSIZE - 16) % 0xFF; // the next 8176 bytes are unused
+	return my_alloc(size);
 }
 
 void my_free (void * ptr)
 {
+	char * cptr = ptr - 8 * sizeof(char);
+	unsigned short bytes = (unsigned char)*(cptr + 1) * 0xFF + (unsigned char)*(cptr + 2);
+	*(cptr) = 0; // unused
+	
+	/* BUG: next_bytes can be the end of a block
+	char status = (char)*(cptr + 8 + bytes);
+	short next_bytes = (unsigned char)*(cptr + bytes + 9) * 0xFF + (unsigned char)*(cptr + bytes + 10);
+	
+	if(status == 0 && next_bytes > 0)
+	{
+		*(cptr + 1) = (bytes + next_bytes) / 0xFF; // ...
+		*(cptr + 2) = (bytes + next_bytes) % 0xFF; // next x bytes are unused
+	}
+	*/
 }
