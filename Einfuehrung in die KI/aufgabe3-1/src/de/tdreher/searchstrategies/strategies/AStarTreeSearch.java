@@ -84,17 +84,6 @@ public class AStarTreeSearch implements Strategy {
 					}
 				}
 			}
-			
-			// test
-			/*if(queue.size() < 20) {
-				for(int i = 0; i < queue.size(); i++) {
-					
-					System.out.print(heuristic.calcHeuristic(queue.get(i).getState(), targetStates) + "." + queue.get(i).getCosts() + " - ");
-				}
-				System.out.println(" ");
-			} else {
-				throw new RuntimeException("Guten Tag");
-			}*/
 		}
 		return "No solution found";
 	}
