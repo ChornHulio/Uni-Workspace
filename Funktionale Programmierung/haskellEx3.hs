@@ -54,3 +54,49 @@ copy n x = x:(copy (n-1) x)
 	= alle (==x) (copy n x)
 	= True
 -}
+
+-- exercise sheet 3, exercise 21
+intersperse :: a -> [a] -> [a]
+intersperse _ (y:[]) = [y]
+intersperse x (y:ys) = y:x:(intersperse x ys)
+
+-- exercise sheet 3, exercise 22
+-- perfect numbers
+perfect :: Int -> [Int]
+perfect n = [x | x <- [1..n], (sum [y | y <- [1..(x-1)], x`mod` y == 0]) == x]
+
+-- exercise sheet 3, exercise 23
+-- write the following equation with map, concat and filter
+-- [x | xs <- xss, x <- xs, odd x]
+oddFromXSS :: [[Int]] -> [Int]
+oddFromXSS xss = filter odd (concat xss)
+
+-- exercise sheet 3, exercise 24
+-- same output? efficiency?
+listComA :: (a -> Bool) -> [a] -> [b] -> [(a,b)]
+listComA p xs ys = [(x,y) | x <- xs, p x, y <- ys]
+listComB :: (a -> Bool) -> [a] -> [b] -> [(a,b)]
+listComB p xs ys = [(x,y) | x <- xs, y <- ys, p x]
+-- same output! listComA is more efficient!
+
+-- exercise sheet 3, exercise 25
+-- calculations with vectors and matrixes
+type Vector = [Int]
+type Matrix = [Vector]
+-- dot product
+dot_product :: Vector -> Vector -> Int
+dot_product [] _ = 0 
+dot_product _ [] = 0 
+dot_product (v:vs) (w:ws) = v*w + dot_product vs ws
+-- mulitply a matrix with a column vector
+mat_x_vec :: Matrix -> Vector -> Vector
+mat_x_vec mss vs = [ dot_product ms vs | ms <- mss ]
+-- transpose a matrix (only symmetrical ones)
+mat_transp :: Matrix -> Matrix
+mat_transp mss | head mss == [] = []
+               | otherwise = [ head ms | ms <- mss ] : (mat_transp [ tail ms | ms <- mss ])
+-- mulitply two matrixes
+mat_x_mat :: Matrix -> Matrix -> Matrix
+mat_x_mat mss nss = mat_transp [ mat_x_vec mss ns | ns <- mat_transp nss] 
+
+
