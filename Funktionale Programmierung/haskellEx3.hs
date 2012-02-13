@@ -99,4 +99,23 @@ mat_transp mss | head mss == [] = []
 mat_x_mat :: Matrix -> Matrix -> Matrix
 mat_x_mat mss nss = mat_transp [ mat_x_vec mss ns | ns <- mat_transp nss] 
 
-
+-- exercise sheet 3, exercise 26
+-- is map a functor?
+-- --> map id = id
+-- --> map (f.g) = map f. map g
+{-
+	map id [] = id [] = []
+	map id (x:xs) = id x : (map id xs) = x : (map id xs) = (x:xs)
+	
+	map (f.g) []
+	= map f [] . map g []
+	= []
+	= map f . map g []
+	map (f.g) (x:xs)
+	= map f (x:xs) . map g (x:xs)
+	= (f.g x) : (map f xs . map g xs)
+	= f (g x) : (map f xs . map g xs)
+	= f x . g x : (map f xs . map g xs)
+	= map f (x:xs) . map g (x:xs)
+	= map f . map g (x:xs)
+-}
