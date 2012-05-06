@@ -4,10 +4,13 @@ import java.io.File;
 
 import javax.sound.sampled.*;
 
+import de.tdreher.algorithm.windows.*;
+
 public class Speaker {
 
-	private static final int SAMPLE_WIDTH = 640; // 640 = 40ms, 480 = 30ms
-	private static final int SLIDING_RATE = 2; // the feed of LPC is SAMPLE_WIDTH/SLIDING_RATE
+	private int sampleWidth = 640; // 640 = 40ms, 480 = 30ms
+	private int slidingRate = 2; // the feed of LPC is SAMPLE_WIDTH/SLIDING_RATE
+	private IWindow window = new HammingWindow(); // type of the window function 
 
 	public int preprocessing(String filename) {
 		int totalFramesRead = 0;
@@ -25,22 +28,36 @@ public class Speaker {
 			try {
 				int numBytesRead = 0;
 				int numFramesRead = 0;
-				// try to read numBytes bytes from the file.
+				// try to read numBytes bytes from the file
 				while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
-					// calculate the number of frames actually read.
+					// calculate the number of frames actually read
 					numFramesRead = numBytesRead / bytesPerFrame;
 					System.out.println("Frames read: " + numFramesRead);
 					totalFramesRead += numFramesRead;
-					short[] rawData = new short[numFramesRead];
-					// cast bits from littleEndian (16bit mono wave)
-					for(int i=0;i<totalFramesRead;i++){
-						int firstByte = (0x000000FF & ((int)audioBytes[2*i+1]));
-						int secondByte = (0x000000FF & ((int)audioBytes[2*i]));
-						rawData[i] = (short) (firstByte << 8 | secondByte);
-					}
-					for(int i = 0; i < numFramesRead-SAMPLE_WIDTH/SLIDING_RATE; i+=SAMPLE_WIDTH/SLIDING_RATE) {
-						// TODO hamming window (in this for loop)
-						// TODO LPC (in this for loop)
+					try {
+						short[] rawData = new short[numFramesRead];
+						// cast bits from littleEndian (16bit mono wave)
+						for(int i = 0;i < numFramesRead; i++){
+							int firstByte = (0x000000FF & ((int)audioBytes[2*i+1]));
+							int secondByte = (0x000000FF & ((int)audioBytes[2*i]));
+							rawData[i] = (short) (firstByte << 8 | secondByte);
+						}
+						// create windows
+						int feed = sampleWidth/slidingRate; 
+						for(int i = 0; i < numFramesRead-sampleWidth; i += feed) {
+							short[] windowData = new short[sampleWidth];
+							// copy window
+							for(int j = 0; j < sampleWidth; j++) {
+								windowData[j] = rawData[i+j];
+							}
+							// perform window function
+							window.calc(windowData);
+							// perform LPC
+							// TODO
+						}
+					} catch (Exception e) {
+						System.err.println("error while preprocessing frames:");
+						e.printStackTrace();
 					}
 				}
 				System.out.println("Total frames read: " + totalFramesRead);
