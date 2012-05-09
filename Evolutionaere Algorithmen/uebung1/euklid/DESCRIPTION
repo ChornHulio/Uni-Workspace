@@ -1,0 +1,10 @@
+Package: euklid
+Type: Package
+Title: Euklid
+Version: 1.0
+Date: 2012-05-09
+Author: Tobias D.
+Maintainer: Tobias D. <nobody@nowhere.com>
+Description: Calculate the distance of two vectors
+License: Public Domain
+LazyLoad: yes
