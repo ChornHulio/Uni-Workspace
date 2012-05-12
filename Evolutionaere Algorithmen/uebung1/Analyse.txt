@@ -1,0 +1,7 @@
+Zeitbedarf 
+ - knn.R: 12 sec
+ - knnWithC.R: 11,5 sec
+
+Interpretation:
+Vermutlich ist der Aufruf einer C Funktion recht teuer. Dadurch ist der Performancegewinn durch die nur kleine C Funktion gering.
+
