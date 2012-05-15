@@ -1,19 +1,26 @@
 package de.tdreher.core;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.sound.sampled.*;
 
+import de.tdreher.algorithm.LPC;
+import de.tdreher.algorithm.ann.unsupervised.NeuralGas;
 import de.tdreher.algorithm.windows.*;
 
 public class Speaker {
 
 	private int sampleWidth = 640; // 640 = 40ms, 480 = 30ms
 	private int slidingRate = 2; // the feed of LPC is SAMPLE_WIDTH/SLIDING_RATE
-	private IWindow window = new HammingWindow(); // type of the window function 
+	private IWindow window = new HammingWindow(); // type of the window function
+	private int p = 12; // number of LPC coefficents
+	private int n = 10; // number of vectors in the codebook
+	
+	private ArrayList<double[]> lpc = new ArrayList<double[]>();
+	double[][] codebook = null; // codebook with n vectors, each vector has p dimensions
 
-	public int preprocessing(String filename) {
-		int totalFramesRead = 0;
+	public int load(String filename) {
 		File fileIn = new File(filename);
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(fileIn);
@@ -32,8 +39,6 @@ public class Speaker {
 				while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
 					// calculate the number of frames actually read
 					numFramesRead = numBytesRead / bytesPerFrame;
-					System.out.println("Frames read: " + numFramesRead);
-					totalFramesRead += numFramesRead;
 					try {
 						short[] rawData = new short[numFramesRead];
 						// cast bits from littleEndian (16bit mono wave)
@@ -53,14 +58,13 @@ public class Speaker {
 							// perform window function
 							window.calc(windowData);
 							// perform LPC
-							// TODO
+							lpc.addAll(LPC.calc(windowData, p));
 						}
 					} catch (Exception e) {
 						System.err.println("error while preprocessing frames:");
 						e.printStackTrace();
 					}
 				}
-				System.out.println("Total frames read: " + totalFramesRead);
 			} catch (Exception e) { 
 				System.err.println("error while reading file:");
 				e.printStackTrace();
@@ -70,5 +74,15 @@ public class Speaker {
 			e.printStackTrace();
 		}
 		return 0; // no error		
+	}
+	
+	public double[][] createCodebook() {
+		NeuralGas ng = new NeuralGas(n,p);
+		codebook = ng.calc(lpc);
+		return codebook;
+	}
+	
+	public ArrayList<double[]> getLPC() {
+		return lpc;
 	}
 }
