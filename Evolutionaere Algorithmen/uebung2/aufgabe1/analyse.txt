@@ -1,2 +1,2 @@
 Der Gradientenaufstieg eignet sich nicht für das Finden des globalen Maximums.
-Meist findet sich nur ein lokales Maximum, aber auch hier kann es gelegentlich zu Problemen kommen (Stichwort: Sattelpunkt). Durch die Variant des Startpunkt kann dieses Problem aber beseitigt werden.
+Meist findet sich nur ein lokales Maximum, aber auch hier kann es gelegentlich zu Problemen kommen (Stichwort: Sattelpunkt). Durch die Variantion des Startpunktes kann dieses Problem aber behoben werden.

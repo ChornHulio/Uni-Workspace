@@ -14,7 +14,7 @@ h <- function(x) x*sin(x)
 l <- function(x) 2+cos(x)+sin(2*x)
 
 #choose what you want
-myfunc <- l # function
+myfunc <- k # function
 start <- 0 # start value (x-value)
 delta <- 0.1 # step width
 learningRate <- 0.25 # learning rate
