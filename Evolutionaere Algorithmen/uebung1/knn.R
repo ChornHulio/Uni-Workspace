@@ -16,7 +16,7 @@ test <- read.table("data/golub50.test")
 # check data
 if(ncol(train) != ncol(test)) {
 	cat("error: wrong input data")
-	q()
+	stop()
 }
 
 # find for every test frame...
@@ -38,7 +38,7 @@ for(i in 1:nrow(test)) {
 	}
 	
 	# ...and check if their classes are the same
-	if(test[i,ncol(test)] != train[j,ncol(train)]) {
+	if(test[i,ncol(test)] != train[nearestTrain,ncol(train)]) {
 		errors = errors + 1
 	}
 }
