@@ -2,6 +2,7 @@ package de.tdreher.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.sound.sampled.*;
 
@@ -15,12 +16,20 @@ public class Speaker {
 	private int slidingRate = 2; // the feed of LPC is SAMPLE_WIDTH/SLIDING_RATE
 	private IWindow window = new HammingWindow(); // type of the window function
 	private int p = 12; // number of LPC coefficents
-	private int n = 10; // number of vectors in the codebook
+	private int n = 100; // number of vectors in the codebook
 	
 	private ArrayList<double[]> lpc = new ArrayList<double[]>();
 	double[][] codebook = null; // codebook with n vectors, each vector has p dimensions
+	
+	public ArrayList<double[]> load(String filename) {
+		return load(filename,-1);
+	}
 
-	public int load(String filename) {
+	public ArrayList<double[]> load(String filename, int milliseconds) {
+		int maxWindows = -1;
+		if(milliseconds > 0) {
+			maxWindows = 16 * milliseconds / sampleWidth;
+		}
 		File fileIn = new File(filename);
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(fileIn);
@@ -49,7 +58,17 @@ public class Speaker {
 						}
 						// create windows
 						int feed = sampleWidth/slidingRate; 
-						for(int i = 0; i < numFramesRead-sampleWidth; i += feed) {
+						int i = -feed;
+						while(i < numFramesRead-sampleWidth-feed) {
+							if(maxWindows >= 0) {
+								if(maxWindows == 0) break;
+								Random ranGen = new Random();
+								i = ranGen.nextInt(numFramesRead-sampleWidth);
+								maxWindows--;
+							} else {
+								i += feed;								
+							}
+							//for(int i = 0; i < numFramesRead-sampleWidth; i += feed) { //TODO delete this line
 							short[] windowData = new short[sampleWidth];
 							// copy window
 							for(int j = 0; j < sampleWidth; j++) {
@@ -73,16 +92,20 @@ public class Speaker {
 			System.err.println("error while opening audio stream:");
 			e.printStackTrace();
 		}
-		return 0; // no error		
+		return lpc;	
 	}
 	
+	public ArrayList<double[]> getLPC() {
+		return lpc;
+	}
+
 	public double[][] createCodebook() {
 		NeuralGas ng = new NeuralGas(n,p);
 		codebook = ng.calc(lpc);
 		return codebook;
 	}
 	
-	public ArrayList<double[]> getLPC() {
-		return lpc;
+	public double[][] getCodebook() {
+		return codebook;
 	}
 }

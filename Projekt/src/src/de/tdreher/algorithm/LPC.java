@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class LPC {
 	
 	public static ArrayList<double[]> calc(short[] frame, int p){
-		int[] r = autocorrelation(frame, p);
+		double[] r = autocorrelation(frame, p);
 		double[][] a = calcLPC(r,p);
-		return moveCoefficents(a,p); // and vonvert in ArrayList
+		return moveCoefficents(a,p); // and convert in ArrayList
 	}
 	
-	private static int[] autocorrelation(short[] frame, int p) {
-		int[] r = new int[p+1];
+	private static double[] autocorrelation(short[] frame, int p) {
+		double[] r = new double[p+1];
 		for(int m = 0; m <= p; m++) {
 			r[m] = 0;
 			for(int n = 0; n < frame.length - m; n++) {
@@ -21,12 +21,12 @@ public class LPC {
 		return r;
 	}
 	
-	private static double[][] calcLPC(int[] r, int p) {
+	private static double[][] calcLPC(double[] r, int p) {
 		double a[][] = new double[p+1][p+1];
 		double E[] = new double[p+1];
 		a[0][0] = 0;
 		E[0] = r[0];		
-		for(int i = 1; i <= p; i++) {
+		for (int i = 1; i <= p; i++) {
 			double k = r[i];
 			for (int j = 1; j < i; j++) {
 				k -= a[i-1][j] * r[i - j];
@@ -35,11 +35,11 @@ public class LPC {
 			
 			a[i][i] = k;
 			
-			for(int j = 1; j < i; j++) {
+			for (int j = 1; j < i; j++) {
 				a[i][j] = a[i-1][j] - k * a[i-1][i-j];
 			}
 			
-			E[i] = (1 - k * k) * E[i-1];			
+			E[i] = (1.0 - k * k) * E[i-1];			
 		}
 		return a;
 	}

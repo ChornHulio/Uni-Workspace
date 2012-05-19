@@ -1,26 +1,69 @@
 package de.tdreher.core;
 
+import de.tdreher.algorithm.classification.NearestNeighbor;
+
 public class Main {
 
 	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
 		
-		// read all training .wav, create LPC values and create weights
-		for(int i = 1; i < 2; i++) {
+		int numberOfSpeakers = 11;
+		Speaker speaker[] = new Speaker[numberOfSpeakers];
+		
+		// read all training waves, create LPC values and create weights
+		for(int i = 0; i < numberOfSpeakers; i++) {
+			long time = System.currentTimeMillis();
 			String str = "/media/Daten/Dokumente/Master/Projekt/Sprachdateien/";
-			str = str.concat(Integer.toString(i));
+			str = str.concat(Integer.toString(i+1));
 			String str1 = str.concat("/1.wav");
 			String str2 = str.concat("/2.wav");
-			Speaker speaker = new Speaker();
-			speaker.load(str1);
-			speaker.load(str2);
-			double[][] codebook = speaker.createCodebook();
-			// DEBUG
-			for(int k = 0; k < 10; k++) {
-				for(int j = 0; j < 12; j++) {
-					System.out.print(Double.toString(codebook[k][j]).subSequence(0, 3) + "\t");
+			speaker[i] = new Speaker();
+			speaker[i].load(str1);
+			speaker[i].load(str2);
+			
+			long time1 = System.currentTimeMillis();
+			System.out.println("speaker " + (i+1) + ": LPC created in " + (time1-time) + " ms");
+			
+			speaker[i].createCodebook();
+			long time2 = System.currentTimeMillis();
+			System.out.println("speaker " + (i+1) + ": codebook created in " + (time2-time1)/1000 + " s");
+		}
+		
+		// TEST SPEAKERS
+		Speaker test[] = new Speaker[numberOfSpeakers];
+		
+		// read all training waves, create LPC values and create weights
+		for(int i = 0; i < numberOfSpeakers; i++) {
+			long time = System.currentTimeMillis();
+			String str = "/media/Daten/Dokumente/Master/Projekt/Sprachdateien/";
+			str = str.concat(Integer.toString(i+1));
+			String str1 = str.concat("/3.wav");
+			test[i] = new Speaker();
+			test[i].load(str1, 25000); // 10 random seconds
+			
+			long time1 = System.currentTimeMillis();
+			System.out.println("test speaker " + (i+1) + ": LPC created in " + (time1-time) + " ms");
+			
+			test[i].createCodebook();
+			long time2 = System.currentTimeMillis();
+			System.out.println("test speaker " + (i+1) + ": codebook created in " + (time2-time1)/1000 + " s");
+		}
+		
+		// TEST CLASSIFICATION
+		NearestNeighbor nn = new NearestNeighbor(speaker);
+		for(int i = 0; i < numberOfSpeakers; i++) {
+			try {
+				int[] classification = nn.calc(test[i]);
+				for(int j = 0; j < classification.length; j++) {
+					System.out.print(classification[j] + "\t");
 				}
 				System.out.println();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("duration: " + (end-start)/1000 + " s");
 	}
 }
