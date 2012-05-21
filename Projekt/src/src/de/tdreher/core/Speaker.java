@@ -68,7 +68,6 @@ public class Speaker {
 							} else {
 								i += feed;								
 							}
-							//for(int i = 0; i < numFramesRead-sampleWidth; i += feed) { //TODO delete this line
 							short[] windowData = new short[sampleWidth];
 							// copy window
 							for(int j = 0; j < sampleWidth; j++) {

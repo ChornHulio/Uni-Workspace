@@ -45,15 +45,13 @@ public class LPC {
 	}
 	
 	private static ArrayList<double[]> moveCoefficents(double[][] a, int p) {
-		ArrayList<double[]> ret = new ArrayList<double[]>();
+		double[] ret = new double[p];
 		for(int i = 0; i < p; i++) {
-			double tmp[] = new double[p];
-			for(int j = 0; j < p; j++) {
-				tmp[j] = a[i+1][j];
-			}
-			ret.add(i, tmp);
+			ret[i] = a[p][i];
 		}
-		return ret;
+		ArrayList<double[]> al = new ArrayList<double[]>();
+		al.add(ret);
+		return al;
 	}
 
 }

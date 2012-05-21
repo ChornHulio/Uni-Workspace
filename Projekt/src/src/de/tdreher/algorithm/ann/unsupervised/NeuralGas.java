@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class NeuralGas {
 	
-	private final int iterations = 5; // iterations of the algorithm
+	private final int iterations = 15; // iterations of the algorithm
 	
 	private int n = 0; // number of vectors in the codebook
 	private int p = 0; // number of values per vector
@@ -31,8 +31,8 @@ public class NeuralGas {
 			permutateData();
 			for(int i = 0; i < data.length; i++) { // go for every data vector
 				// init params
-				double adaption = 0.1; //Math.pow(0.001, (iteration / data.length));
-				double neighbor = 0.1; //n/2 * Math.pow(0.01/n/2, (iteration / data.length));
+				double adaption = 0.1; //Math.pow(0.001, ((iteration+1) / iterations));
+				double neighbor = 0.1; //n/2 * Math.pow(0.01/n/2, ((iteration+1) / iterations));
 				
 				// get the next vector
 				double[] v = data[i];

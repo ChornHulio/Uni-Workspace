@@ -1,0 +1,17 @@
+Training mit 15 Iterationen (NeuralGas)
+Sprecheridentifikation mit insgesamt 5 sec Ausschnitt (zufällige Samples)
+Sprecherreihenfolge: 1, 2, 3, 4, 5, 6, Dimitrij, Felix, Jonas, Manuel, Tobias
+Dauer: 188 sec
+Korrekt: 7 von 11
+
+27	6	15	12	14	26	4	0	9	6	6	
+8	44	19	13	10	11	6	2	7	3	2	
+7	17	32	14	13	14	8	3	4	6	7	
+5	9	17	43	16	5	8	2	5	13	2	
+17	14	22	9	15	9	9	8	5	7	10	
+11	14	17	6	8	28	6	3	13	8	11	
+7	2	9	7	15	8	15	11	19	18	14	
+4	8	13	9	15	5	8	12	19	18	14	
+4	5	4	8	11	8	18	9	21	22	15	
+4	6	7	11	7	6	14	17	14	31	8	
+0	0	8	1	8	5	15	19	27	12	30
