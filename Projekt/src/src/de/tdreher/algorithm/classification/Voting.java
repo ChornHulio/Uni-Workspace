@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 import de.tdreher.core.Speaker;
 
-public class NearestNeighbor {
+public class Voting {
 	
 	Speaker[] trainedSpeaker = null;
 	
-	public NearestNeighbor(Speaker[] trainedSpeaker) {
+	public Voting(Speaker[] trainedSpeaker) {
 		this.trainedSpeaker = trainedSpeaker;		
 	}
 	
-	public int[] calc(Speaker speakerToCheck) throws Exception {
-		int[] results = new int[trainedSpeaker.length];
+	public double[] calc(Speaker speakerToCheck) throws Exception {
+		double[] results = new double[trainedSpeaker.length];
 		for(int i = 0; i < results.length; i++) {
 			results[i] = 0;
 		}
@@ -24,6 +24,9 @@ public class NearestNeighbor {
 			int speakerNo = 0;
 			for(int s = 0; s < trainedSpeaker.length; s++) {
 				double[][] codebook = trainedSpeaker[s].getCodebook();
+				if(codebook == null) {
+					return null;
+				}
 				for(int j = 0; j < codebook.length; j++) {
 					double tmpDistance = distance(codebook[j],testData.get(i));
 					if(distance > tmpDistance) {

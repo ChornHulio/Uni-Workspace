@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class LPC {
 	
-	public static ArrayList<double[]> calc(short[] frame, int p){
+	public static ArrayList<double[]> calc(double[] frame, int p){
 		double[] r = autocorrelation(frame, p);
 		double[][] a = calcLPC(r,p);
 		return moveCoefficents(a,p); // and convert in ArrayList
 	}
 	
-	private static double[] autocorrelation(short[] frame, int p) {
+	private static double[] autocorrelation(double[] frame, int p) {
 		double[] r = new double[p+1];
 		for(int m = 0; m <= p; m++) {
 			r[m] = 0;

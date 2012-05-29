@@ -2,13 +2,13 @@ package de.tdreher.core;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
-import javax.sound.sampled.*;
-
+import de.tdreher.algorithm.EnergyCut;
 import de.tdreher.algorithm.LPC;
 import de.tdreher.algorithm.ann.unsupervised.NeuralGas;
 import de.tdreher.algorithm.windows.*;
+import de.tdreher.audio.WavFile;
+import de.tdreher.audio.WavFileException;
 
 public class Speaker {
 
@@ -17,6 +17,7 @@ public class Speaker {
 	private IWindow window = new HammingWindow(); // type of the window function
 	private int p = 12; // number of LPC coefficents
 	private int n = 100; // number of vectors in the codebook
+	private int energyLevel = 0; // percentage of windows to cut
 	
 	private ArrayList<double[]> lpc = new ArrayList<double[]>();
 	double[][] codebook = null; // codebook with n vectors, each vector has p dimensions
@@ -26,72 +27,50 @@ public class Speaker {
 	}
 
 	public ArrayList<double[]> load(String filename, int milliseconds) {
-		int maxWindows = -1;
-		if(milliseconds > 0) {
-			maxWindows = 16 * milliseconds / sampleWidth;
-		}
 		File fileIn = new File(filename);
+
+		double[] buffer = null;		
+		WavFile readWavFile = null;
 		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(fileIn);
-			int bytesPerFrame = audioInputStream.getFormat().getFrameSize();
-			if (bytesPerFrame == AudioSystem.NOT_SPECIFIED) {
-				// some audio formats may have unspecified frame size
-				// in that case we may read any amount of bytes
-				bytesPerFrame = 1;
-			} 
-			int numBytes = (int) (audioInputStream.getFrameLength() * bytesPerFrame); // take all
-			byte[] audioBytes = new byte[numBytes];
-			try {
-				int numBytesRead = 0;
-				int numFramesRead = 0;
-				// try to read numBytes bytes from the file
-				while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
-					// calculate the number of frames actually read
-					numFramesRead = numBytesRead / bytesPerFrame;
-					try {
-						short[] rawData = new short[numFramesRead];
-						// cast bits from littleEndian (16bit mono wave)
-						for(int i = 0;i < numFramesRead; i++){
-							int firstByte = (0x000000FF & ((int)audioBytes[2*i+1]));
-							int secondByte = (0x000000FF & ((int)audioBytes[2*i]));
-							rawData[i] = (short) (firstByte << 8 | secondByte);
-						}
-						// create windows
-						int feed = sampleWidth/slidingRate; 
-						int i = -feed;
-						while(i < numFramesRead-sampleWidth-feed) {
-							if(maxWindows >= 0) {
-								if(maxWindows == 0) break;
-								Random ranGen = new Random();
-								i = ranGen.nextInt(numFramesRead-sampleWidth);
-								maxWindows--;
-							} else {
-								i += feed;								
-							}
-							short[] windowData = new short[sampleWidth];
-							// copy window
-							for(int j = 0; j < sampleWidth; j++) {
-								windowData[j] = rawData[i+j];
-							}
-							// perform window function
-							window.calc(windowData);
-							// perform LPC
-							lpc.addAll(LPC.calc(windowData, p));
-						}
-					} catch (Exception e) {
-						System.err.println("error while preprocessing frames:");
-						e.printStackTrace();
-					}
-				}
-			} catch (Exception e) { 
-				System.err.println("error while reading file:");
-				e.printStackTrace();
+			readWavFile = WavFile.openWavFile(fileIn);
+			if(readWavFile.getNumChannels() != 1) {
+				throw new WavFileException("wrong number of channels in wav file");
 			}
+			int numFrames = 0;
+			if(milliseconds > 0) {
+				numFrames = 16*milliseconds;
+			} else {
+				numFrames = (int) readWavFile.getNumFrames();			
+			}
+			buffer = new double[numFrames];
+			readWavFile.readFrames(buffer, buffer.length);
+			readWavFile.close();
 		} catch (Exception e) {
-			System.err.println("error while opening audio stream:");
+			System.err.println("error while reading wav file:");
 			e.printStackTrace();
 		}
-		return lpc;	
+		
+		double absolutEnergyLevel = EnergyCut.calcEnergyLevel(energyLevel,buffer);
+		
+		// create windows
+		int feed = sampleWidth/slidingRate; 
+		for(int i = 0; i < buffer.length-sampleWidth; i+=feed) {
+			double[] windowData = new double[sampleWidth];
+			// copy window
+			for(int j = 0; j < sampleWidth; j++) {
+				windowData[j] = buffer[i+j];
+			}
+			// perform window function
+			windowData = window.calc(windowData);
+			// cut windows with low energy
+			if(EnergyCut.calc(absolutEnergyLevel,windowData)) {
+				continue;
+			}
+			// perform LPC
+			lpc.addAll(LPC.calc(windowData, p));
+		}
+		
+		return lpc;
 	}
 	
 	public ArrayList<double[]> getLPC() {
@@ -99,6 +78,9 @@ public class Speaker {
 	}
 
 	public double[][] createCodebook() {
+		if(lpc.isEmpty()) {
+			return null;
+		}
 		NeuralGas ng = new NeuralGas(n,p);
 		codebook = ng.calc(lpc);
 		return codebook;

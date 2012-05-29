@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import de.tdreher.core.SortArray;
+
 public class NeuralGas {
 	
 	private final int iterations = 15; // iterations of the algorithm
@@ -31,20 +33,20 @@ public class NeuralGas {
 			permutateData();
 			for(int i = 0; i < data.length; i++) { // go for every data vector
 				// init params
-				double adaption = 0.1; //Math.pow(0.001, ((iteration+1) / iterations));
-				double neighbor = 0.1; //n/2 * Math.pow(0.01/n/2, ((iteration+1) / iterations));
+				double adaption = Math.pow(0.001, ((iteration+1) / iterations));
+				double neighbor = n/2 * Math.pow(0.01/n/2, ((iteration+1) / iterations));
 				
 				// get the next vector
 				double[] v = data[i];
 				
 				// calculate distances between v and w_j
-				WSortArray[] wsa = new WSortArray[n];
+				SortArray[] wsa = new SortArray[n];
 				for(int j = 0; j < n; j++) {
 					double distance = 0.0;
 					for(int k = 0; k < p; k++) {
 						distance += Math.pow(v[k] - w[j][k] , 2); // euclidean distance
 					}
-					wsa[j] = new WSortArray(distance, j);
+					wsa[j] = new SortArray(distance, j);
 				}
 				
 				// sort distances
@@ -91,29 +93,4 @@ public class NeuralGas {
 			data[j] = tmp;
 		}
 	}
-	
-	/**
-	 * Class to sort the distances of w_i to v
-	 */
-	public class WSortArray implements Comparable<WSortArray> {
-		 
-		  public double distance = 0;
-		  public int index = 0;
-		  
-		  public WSortArray(double d, int i) {
-			  this.distance = d;
-			  this.index = i;
-		  }
-		 
-		  @Override
-		  public int compareTo(WSortArray w) {
-		    if(this.distance < w.distance) {
-		      return -1;
-		    }
-		    if(this.distance > w.distance) {
-		      return 1;
-		    }
-		    return 0;
-		  }
-		}
 }
