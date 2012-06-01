@@ -30,11 +30,11 @@ while(L != 0) {
 			w <- w + delta*x[i,]
 		}
 		# plot
-		plot(p1, xlim=c(0,20), ylim=c(0,20), pch=20, col="green")
+		plot(p1, xlim=c(-7,20), ylim=c(-5,17), pch=20, col="green")
 		points(p2, pch=20, col="blue")
-		uX <- c(w[1]-3*w[2],w[1],w[1]+3*w[2]) # orthogonal vector (x-values)
-		uY <- c(w[2]+3*w[1],w[2],w[2]-3*w[1]) # orthogonal vector (y-values)
-		lines(uX,uY) # plot orthogonal vector
+		plotX <- seq(-7,20,0.1)
+		plotY <- (w[3]-plotX*w[1])/w[2]   
+		lines(plotX,plotY) # plot orthogonal vector
 	}
 	cat("wrong classes: ", L, "\n")
 }
