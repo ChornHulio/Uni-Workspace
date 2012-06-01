@@ -1,4 +1,6 @@
 initPopulation <- function(candidates,gene,min,max) {
+	# each but the last column of the population presents one gene of each individual
+	# the last column of the population show the fitness of each individual
 	population <- matrix(nrow=candidates, ncol=(gene+1))
 	for(i in 1:candidates) {
 		population[i] <- runif(gene,min,max)
@@ -39,8 +41,6 @@ selectNextGen <- function(population,newSize) {
 }
 
 mainEA <- function(landscape, generations, candidates, gene, mutateRate, xMin, xMax, yMin, yMax) {
-	# each but the last column of the population presents one gene of each individual
-	# the last column of the population show the fitness of each individual
 	population <- initPopulation(candidates,gene,xMin,xMax)
 	population <- evaluate(landscape,population)
 	
