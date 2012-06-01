@@ -2,8 +2,8 @@
 generations <- 100
 sizeOfPopulation <- 10
 gene <- 3
-mutateRate <- 0.25
-mutateOnlyOneGene <- TRUE
+mutateRate <- 0.15
+mutateOnlyOneGene <- FALSE
 xMin <- -10 # for first initalisation and plot
 xMax <-  15 # for first initalisation and plot
 yMin <-  -5 # for plot
@@ -33,28 +33,19 @@ for(i in 1:nrow(p)) {
 # define landscapes (fitness function)
 landscape <- function(w) {
 #	# sum of false classified points
+#	# -> have a lot of local minimas
 #	delta <- 0
 #	for(i in 1:nrow(x)) {
 #		if(y[i] != sign(x[i,] %*% w)) {
 #			delta <- delta + 1
 #		}
 #	}
-#	
-#	# euclidean distance of false classified point
-#	delta <- 0
-#	for(i in 1:nrow(x)) {
-#		if(y[i] != sign(x[i,] %*% w)) {
-#			delta <- delta + sum((x[i,]-w)^2)
-#		}
-#	}
 
-	# euclidean distance of all classified point (weighted)
+	# distances to the orthogonal vector of false classified point
 	delta <- 0
 	for(i in 1:nrow(x)) {
 		if(y[i] != sign(x[i,] %*% w)) {
-			delta <- delta + 100*sum((x[i,]-w)^2)
-		} else {
-			delta <- delta - sum((x[i,]-w)^2)
+			delta <- delta + abs(x[i,] %*% w)
 		}
 	}
 	return(delta)
@@ -62,11 +53,11 @@ landscape <- function(w) {
 
 # functions
 initPopulation <- function(candidates,gene,min,max) {
+	# each but the last column of the population presents one gene of each individual
+	# the last column of the population show the fitness of each individual
 	population <- matrix(nrow=candidates, ncol=(gene+1))
 	for(i in 1:candidates) {
-		for(j in 1:gene) {
-			population[i,j] <- runif(1,min,max)
-		}
+		population[i,] <- runif(gene+1,min,max)
 		population[i,gene+1] <- 0
 	}
 	return(population)
@@ -110,28 +101,14 @@ fpsSelection <- function(population,newSize) {
 	return(population[1:newSize,])
 }
 
-tournamentSelection <- function(population,newSize) {
-	k <- 4
-	newPopulation <- matrix(nrow=newSize, ncol=ncol(population))
-	for(i in 1:newSize) {
-		kIndividuals <- population[sample(1:ncol(population),k,replace=TRUE),]
-		kSorted <- kIndividuals[order(kIndividuals[,ncol(kIndividuals)]),]
-		newPopulation[i,] <- kSorted[1,]
-	}
-	return(newPopulation)
-}
-
-mainEA <- function(landscape, generations, candidates, gene, mutateRate, xMin, xMax, yMin, yMax) {
-	# each but the last column of the population presents one gene of each individual
-	# the last column of the population show the fitness of each individual
-	population <- initPopulation(candidates,gene,xMin,xMax)
+mainEA <- function(landscape, generations, size, gene, mutateRate, xMin, xMax, yMin, yMax) {
+	population <- initPopulation(size,gene,xMin,xMax)
 	population <- evaluate(landscape,population)	
 	generation = 1
 	while(generations > generation) {		
 		population <- mutateOffspring(population,mutateRate,gene)
 		population <- evaluate(landscape,population)
-		population <- fpsSelection(population,candidates)
-		#population <- tournamentSelection(population,candidates)
+		population <- fpsSelection(population,size)
 		generation <- generation + 1
 		
 		# plot everything
