@@ -1,0 +1,7 @@
+Edge3 ohne Swap (schwarz) findet oft nur ein lokales Minimum. Macht auch Sinn, da es sich ja nur um eine Rekombination von Routen, statt um neue Routen handelt.
+
+Swap (blau) alleine funktioniert ganz gut.
+
+Swap mit Edge3 (grün) funktioniert sehr gut.
+
+Je größer die Population, desto eher wird das Optimum gefunden. Die Anzahl der Generationen kann ohne Probleme unter 100 liegen, da meist vorher ein Minima gefunden wurde.
