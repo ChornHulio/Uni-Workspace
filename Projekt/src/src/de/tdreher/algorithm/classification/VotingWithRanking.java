@@ -6,7 +6,7 @@ import java.util.Arrays;
 import de.tdreher.core.SortArray;
 import de.tdreher.core.Speaker;
 
-public class VotingWithRanking {
+public class VotingWithRanking implements IVoting {
 	
 	Speaker[] trainedSpeaker = null;
 	
@@ -14,13 +14,13 @@ public class VotingWithRanking {
 		this.trainedSpeaker = trainedSpeaker;		
 	}
 	
-	public double[] calc(Speaker speakerToCheck) throws Exception {
+	public double[] process(Speaker speakerToCheck) throws Exception {
 		double[] results = new double[trainedSpeaker.length];
 		for(int i = 0; i < results.length; i++) {
 			results[i] = 0;
 		}
 		
-		ArrayList<double[]> testData = speakerToCheck.getLPC();
+		ArrayList<double[]> testData = speakerToCheck.getFeatures();
 		for(int i = 0; i < testData.size(); i++) {
 			SortArray[] sortArray = new SortArray[trainedSpeaker.length];
 			for(int s = 0; s < trainedSpeaker.length; s++) {

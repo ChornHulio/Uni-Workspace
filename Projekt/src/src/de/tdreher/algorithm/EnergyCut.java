@@ -1,13 +1,8 @@
 package de.tdreher.algorithm;
 
 public class EnergyCut {
-	
-	/**
-	 * @param energyLevel level as double value
-	 * @param frame
-	 * @return true if the frame is to cut
-	 */
-	public static boolean calc(double energyLevel, double[] frame) {
+
+	private static boolean calc(double energyLevel, double[] frame) {
 		double energy = 0;
 		for(int i = 0; i < frame.length; i++) {
 			energy += Math.abs(frame[i]);
@@ -19,7 +14,7 @@ public class EnergyCut {
 		return true;
 	}
 
-	public static double calcEnergyLevel(int energyLevel, double[] buffer) {
+	private static double getMaxEnergyLevel(int energyLevel, double[] buffer) {
 		int length = buffer.length;
 		double energy = 0;
 		for(int i = 0; i < buffer.length; i++) {
@@ -31,6 +26,11 @@ public class EnergyCut {
 		}
 		energy /= length;		
 		return energy*((double) energyLevel/100);
+	}
+
+	public static double[] cut(double[] input, int energyLevel, int sampleWidth) {
+		// TODO sort samples and cut
+		return input;
 	}
 
 }

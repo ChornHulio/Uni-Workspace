@@ -8,11 +8,12 @@ import de.tdreher.core.SortArray;
 
 public class NeuralGas {
 	
-	private final int iterations = 15; // iterations of the algorithm
+	private final int iterations = 10; // iterations of the algorithm
 	
 	private int n = 0; // number of vectors in the codebook
 	private int p = 0; // number of values per vector
 	private double[][] w = null; // synaptic weights (dimension n * p)
+	private double[][] t = null;
 	
 	private double[][] data = null;
 	
@@ -30,12 +31,14 @@ public class NeuralGas {
 		orgData = null; // delete old data
 		
 		for(int iteration = 0; iteration < iterations; iteration++) {
+			// init params
+			double adaption = Math.pow(0.001, ((double) (iteration+1) / iterations));
+			double neighbor = n/2 * Math.pow(0.01/n/2, ((double) (iteration+1) / iterations));
+			
+			// init data
 			permutateData();
+			
 			for(int i = 0; i < data.length; i++) { // go for every data vector
-				// init params
-				double adaption = Math.pow(0.001, ((iteration+1) / iterations));
-				double neighbor = n/2 * Math.pow(0.01/n/2, ((iteration+1) / iterations));
-				
 				// get the next vector
 				double[] v = data[i];
 				
@@ -60,9 +63,31 @@ public class NeuralGas {
 					}
 				}			
 			}
+			
+			// check distance to old w
+			/*double testDis = 0.0;
+			double testAbs = 0.0;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < p; j++) {
+					testDis += Math.sqrt(Math.pow(w[i][j] - t[i][j] , 2)); // euclidean distance
+					testAbs += w[i][j];
+				}
+			}
+			// output
+			if(testDis > 0.0001) {
+				System.out.println("Iteration: " + iteration + " \t difference: " + testDis + " \t absolut: " + testAbs + "\t(" + adaption + " | " + neighbor + ")");
+			}
+			// copy
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < p; j++) {
+					t[i][j] = w[i][j];
+				}
+			}*/
 		}
 		return w;
 	}
+	
+	
 
 	private void initW() {
 		w = new double[n][p];
@@ -70,6 +95,13 @@ public class NeuralGas {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < p; j++) {
 				w[i][j] = 2 * rand.nextDouble() - 1;
+			}
+		}
+		
+		t = new double[n][p];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < p; j++) {
+				t[i][j] = w[i][j];
 			}
 		}
 	}

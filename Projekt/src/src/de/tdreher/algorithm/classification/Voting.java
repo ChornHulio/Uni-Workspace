@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import de.tdreher.core.Speaker;
 
-public class Voting {
+public class Voting implements IVoting {
 	
 	Speaker[] trainedSpeaker = null;
 	
@@ -12,13 +12,13 @@ public class Voting {
 		this.trainedSpeaker = trainedSpeaker;		
 	}
 	
-	public double[] calc(Speaker speakerToCheck) throws Exception {
+	public double[] process(Speaker speakerToCheck) throws Exception {
 		double[] results = new double[trainedSpeaker.length];
 		for(int i = 0; i < results.length; i++) {
 			results[i] = 0;
 		}
 		
-		ArrayList<double[]> testData = speakerToCheck.getLPC();
+		ArrayList<double[]> testData = speakerToCheck.getFeatures();
 		for(int i = 0; i < testData.size(); i++) {
 			double distance = Double.MAX_VALUE;
 			int speakerNo = 0;
