@@ -3,6 +3,10 @@ package de.tdreher.core;
 import java.text.DecimalFormat;
 
 import de.tdreher.algorithm.classification.*;
+import de.tdreher.algorithm.classification.svm.SVMWrapper;
+import de.tdreher.algorithm.classification.voting.IVoting;
+import de.tdreher.algorithm.classification.voting.Voting;
+import de.tdreher.algorithm.classification.voting.VotingOverK;
 
 public class Main {
 	
@@ -16,6 +20,7 @@ public class Main {
 		Speaker speaker[] = new Speaker[numberOfSpeakers];
 		
 		// TRAINING
+		SVMWrapper svm = new SVMWrapper();
 		for(int i = startNoOfSpeakers; i < startNoOfSpeakers+numberOfSpeakers; i++) {
 			long time = System.currentTimeMillis();
 			String str = "/media/Daten/Dokumente/Master/Projekt/Sprachdateien/";
@@ -24,14 +29,17 @@ public class Main {
 			String str2 = str.concat("/2.wav");
 			speaker[i-startNoOfSpeakers] = new Speaker(true, mfcc); // training
 			speaker[i-startNoOfSpeakers].load(str1);
-			speaker[i-startNoOfSpeakers].load(str2);			
+			speaker[i-startNoOfSpeakers].load(str2);
+			svm.addSVMData(speaker[i-startNoOfSpeakers].getFeatures(), i);
 			speaker[i-startNoOfSpeakers].createCodebook();
 			long time1 = System.currentTimeMillis();
 			System.out.println("speaker " + i + " trained in " + (time1-time)/1000 + " s");
 		}
+		svm.saveSVMData("training.org");
 		
 		// TESTING
 		Speaker test[] = new Speaker[numberOfSpeakers];
+		svm = new SVMWrapper();
 		
 		// read all training waves, create LPC values and create weights
 		for(int i = startNoOfSpeakers; i < startNoOfSpeakers+numberOfSpeakers; i++) {
@@ -40,11 +48,12 @@ public class Main {
 			str = str.concat(Integer.toString(i));
 			String str1 = str.concat("/3.wav");
 			test[i-startNoOfSpeakers] = new Speaker(false,mfcc); // testing
-			test[i-startNoOfSpeakers].load(str1,2000);
-			
+			test[i-startNoOfSpeakers].load(str1);
+			svm.addSVMData(test[i-startNoOfSpeakers].getFeatures(), i);
 			long time1 = System.currentTimeMillis();
 			System.out.println("test speaker " + i + ": Features created in " + (time1-time) + " ms");
 		}
+		svm.saveSVMData("test.org");
 		
 		// CLASSIFICATION I
 		int correctDetection = 0;

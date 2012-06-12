@@ -1,4 +1,4 @@
-package de.tdreher.algorithm.classification;
+package de.tdreher.algorithm.classification.voting;
 
 import de.tdreher.core.Speaker;
 
