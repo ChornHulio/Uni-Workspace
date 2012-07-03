@@ -1,0 +1,3 @@
+Es wurde mit jedem Verfahren (Batch und Momentum) zwei Versuche gemacht (siehe Plots).
+
+MLP mit Momentum funktioniert deutlich besser als MLP im Batch-Verfahren.
