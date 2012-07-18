@@ -1,7 +1,8 @@
 load("pareto.Rdata")
 
 dominates <- function(j,i) {
-	if(data[j,1] >= data[i,1] && data[j,2] >= data[i,2]) {
+	if(data[j,1] > data[i,1] && data[j,2] >= data[i,2]
+		|| data[j,1] >= data[i,1] && data[j,2] > data[i,2]) {
 		return(TRUE)
 	}
 	return(FALSE)

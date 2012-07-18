@@ -9,10 +9,14 @@ initPopulation <- function(candidates,gene,min,max) {
     return(population)
 }
 
-# attention: only for 2D landscapes
 evaluate <- function(landscape,population) {
 	population[,2] <- landscape(population[,1])
     return(population)
+}
+
+evaluateIndividual <- function(landscape,individual) {
+	individual[2] <- landscape(individual[1])
+    return(individual)
 }
 
 mutateOffspring <- function(population,mutateRate) {
@@ -33,7 +37,7 @@ mutateOffspring <- function(population,mutateRate) {
     return(newPopulation)
 }
 
-fitnessSelection <- function(population,newSize) {
+truncationSelection <- function(population,newSize) {
     population <- population[order(population[,ncol(population)]),]
     return(population[nrow(population):(nrow(population)-newSize),])
 }
@@ -76,7 +80,7 @@ sharing <- function(population) {
 		shsum <- 0
 		for(j in 1:nrow(population)) {
 			d <- abs(population[i,1] - population[j,1])
-			shsum <- shsum + sh(d,1,3)
+			shsum <- shsum + sh(d,3,1)
 		}
 		if(shsum > 0.01) { # avoid dividing through zero
 			population[i,2] <- population[i,2] / shsum
@@ -92,10 +96,14 @@ crowding <- function(population) {
 	k <- 1
 	for(i in 1:(rows/2)) {
 		parentIndices <- sample(1:rows,2,replace=FALSE)
-		p1 <- population[parentIndices[1],]
-		p2 <- population[parentIndices[2],]
-		o1 <- p1 + mutateRate * sample(c(-1,1),1,replace=TRUE)
-		o2 <- p2 + mutateRate * sample(c(-1,1),1,replace=TRUE)
+		p1 <- c(population[parentIndices[1]],0)
+		p2 <- c(population[parentIndices[2]],0)
+		o1 <- c(p1[1] + mutateRate * sample(c(-1,1),1,replace=TRUE),0)
+		o2 <- c(p2[1] + mutateRate * sample(c(-1,1),1,replace=TRUE),0)
+		p1 <- evaluateIndividual(landscape,p1)
+		p2 <- evaluateIndividual(landscape,p2)
+		o1 <- evaluateIndividual(landscape,o1)
+		o2 <- evaluateIndividual(landscape,o2)
 		if(abs(p1[1]-o1[1]) + abs(p2[1]-o2[1]) < abs(p1[1]-o2[1]) + abs(p2[1]-o1[1])) {
 			if(o1[2] > p1[2]) {
 				newPopulation[k,] <- o1
@@ -137,7 +145,7 @@ mainEA <- function(landscape, generations, candidates, gene, mutateRate, xMin, x
         	population <- mutateOffspring(population,mutateRate)
         	population <- evaluate(landscape,population)  
         	population <- sharing(population)
-        	population <- fitnessSelection(population,candidates)
+        	population <- truncationSelection(population,candidates)
         } else if(mode == 2) { # crowding
         	population <- evaluate(landscape,population)  
         	population <- crowding(population)
