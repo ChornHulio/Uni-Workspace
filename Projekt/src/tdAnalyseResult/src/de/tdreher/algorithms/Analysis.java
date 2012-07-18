@@ -1,5 +1,6 @@
 package de.tdreher.algorithms;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Analysis {
@@ -7,6 +8,9 @@ public class Analysis {
 	ArrayList<Integer> labels = new ArrayList<Integer>();
 	int[][] votingMatrix = null;
 	int[] labelToIndex;
+	
+	long totalFrames = 0;
+	long correctFrames = 0;
 
 	public String process(ArrayList<Integer> originLabels, ArrayList<Integer> predictedLabels) {
 		extractLabels(originLabels);
@@ -21,6 +25,10 @@ public class Analysis {
 			int correct = labelToIndex[originLabels.get(i)];
 			int predicted = labelToIndex[predictedLabels.get(i)];
 			votingMatrix[correct][predicted]++;
+			totalFrames++;
+			if(correct == predicted) {
+				correctFrames++;
+			}
 		}
 		return convertToString();
 	}
@@ -56,7 +64,10 @@ public class Analysis {
 	}
 
 	private String convertToString() {
-		String str = "";
+		DecimalFormat douF = new DecimalFormat("##.##");
+		String str = "total accuracy: " + douF.format(getAccuracy()) + " %";
+		str += System.getProperty("line.separator");
+		str += System.getProperty("line.separator");
 		for(int i = 0; i < votingMatrix.length; i++) {
 			for(int j = 0; j < votingMatrix[i].length; j++) {
 				str += votingMatrix[i][j] + "\t";
@@ -64,6 +75,15 @@ public class Analysis {
 			str += System.getProperty("line.separator");
 		}
 		return str;
+	}
+
+	public double getAccuracy() {		
+		return 100.0 * correctFrames / totalFrames;
+	}
+	
+	public String getAccuracyAsString() {
+		DecimalFormat douF = new DecimalFormat("##.##");
+		return douF.format(100.0 * correctFrames / totalFrames);
 	}
 
 }

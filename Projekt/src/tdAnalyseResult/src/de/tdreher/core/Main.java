@@ -14,59 +14,62 @@ import de.tdreher.common.ArgInterpreter;
 public class Main {
 
 	private static Settings settings = null;
+	private static Analysis analysis = new Analysis();
 	private static ArrayList<Integer> originLabels = new ArrayList<Integer>();
 	private static ArrayList<Integer> predictedLabels = new ArrayList<Integer>();
-	
+
 	public static void main(String[] args) {
 		// init settings
 		settings = ArgInterpreter.interpret(args);
-		if(settings == null) {
+		if (settings == null) {
 			return;
 		}
-		
+
 		// read input files (feature vectors)
-		for(int i = 0; i < settings.getOriginFiles().size(); i++) {
+		for (int i = 0; i < settings.getOriginFiles().size(); i++) {
 			try {
 				readOneFile(settings.getOriginFiles().get(i), true);
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				return;
-			}			
+			}
 		}
-		
+
 		// read input files (codebook vectors)
-		for(int i = 0; i < settings.getPredictionFiles().size(); i++) {
+		for (int i = 0; i < settings.getPredictionFiles().size(); i++) {
 			try {
 				readOneFile(settings.getPredictionFiles().get(i), false);
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				return;
-			}			
+			}
 		}
-		
+
 		// check if input files are correct
-		if(originLabels.isEmpty() || predictedLabels.isEmpty()) {
+		if (originLabels.isEmpty() || predictedLabels.isEmpty()) {
 			System.err.println("Input files are empty");
 			return;
 		}
-		if(originLabels.size() != predictedLabels.size()) {
-			System.out.println(originLabels.size() + " | " + predictedLabels.size());
-			System.err.println("The original files contains not equal labels than the prediction files");
+		if (originLabels.size() != predictedLabels.size()) {
+			System.out.println(originLabels.size() + " | "
+					+ predictedLabels.size());
+			System.err
+					.println("The original files contains not equal labels than the prediction files");
 			return;
 		}
-		
+
 		// clear output file if it is necassary
 		clearOutputFile();
-		
+
 		// analyse it
-		Analysis analysis = new Analysis();
 		String res = analysis.process(originLabels, predictedLabels);
 
 		// write in output file
 		writeOutputFile(res);
 	}
-	
-	private static void readOneFile(File file, boolean originFile) throws Exception {
+
+	private static void readOneFile(File file, boolean originFile)
+			throws Exception {
 		FileReader fr = null;
 		try {
 			fr = new FileReader(file);
@@ -76,7 +79,7 @@ public class Main {
 			while ((line = in.readLine()) != null) {
 				line = line.trim();
 				String[] strings = line.split(" ");
-				if(originFile) {
+				if (originFile) {
 					originLabels.add(Integer.parseInt(strings[0]));
 				} else {
 					predictedLabels.add(Integer.parseInt(strings[0]));
@@ -94,11 +97,11 @@ public class Main {
 			}
 		}
 	}
-	
+
 	private static void clearOutputFile() {
 		Writer fw = null;
 		try {
-			fw = new FileWriter(settings.getOutputFile(), settings.getAppendFlag());
+			fw = new FileWriter(settings.getOutputFile());
 			fw.write("");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -108,6 +111,23 @@ public class Main {
 					fw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+			}
+		}
+
+		if (settings.getAccuracyFile() != null) {
+			try {
+				fw = new FileWriter(settings.getAccuracyFile());
+				fw.write("");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (fw != null) {
+					try {
+						fw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -128,6 +148,23 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
-		}		
+		}
+		if (settings.getAccuracyFile() != null) {
+			try {
+				fw = new FileWriter(settings.getAccuracyFile(), true);
+				fw.write(analysis.getAccuracyAsString()
+						+ System.getProperty("line.separator"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (fw != null) {
+					try {
+						fw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 }

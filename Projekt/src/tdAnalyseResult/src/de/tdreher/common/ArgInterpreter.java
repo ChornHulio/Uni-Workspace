@@ -25,8 +25,8 @@ public class ArgInterpreter {
 						addPredictionFile(args[++i]);						
 					} else if((args[i].equalsIgnoreCase("--outputFile") || args[i].equalsIgnoreCase("-o")) && args.length > (i+1)) {						
 						setOutputFile(args[++i]);						
-					} else if((args[i].equalsIgnoreCase("--append") || args[i].equalsIgnoreCase("-a"))) {						
-						settings.setAppendFlag();						
+					} else if((args[i].equalsIgnoreCase("--accuracy") || args[i].equalsIgnoreCase("-a"))) {						
+						setAccuracyFile(args[++i]);						
 					} else {
 						throw new Exception("Wrong argument: " + args[i]);
 					}
@@ -61,7 +61,7 @@ public class ArgInterpreter {
 		System.out.println("\t-p\t--predictionFile\toutput file of the prediciton");
 		System.out.println("\t\t\t\t(if you use more than one input file, you have to use this option again)");
 		System.out.println("\t-o\t--outputfile\toutput file");
-		System.out.println("\t-a\t--append\tappend the output at the end of the output file");
+		System.out.println("\t-a\t--accuracy\twrite the accuracy in an extra output file");
 		System.out.println();
 		System.out.println("EXAMPLES:");
 		System.out.println("\tstandard analysis from one input file each");
@@ -88,5 +88,9 @@ public class ArgInterpreter {
 	private static void setOutputFile(String str) throws Exception {
 		settings.setOutputFile(new File(str));
 		outputFileSet = true;
+	}
+	
+	private static void setAccuracyFile(String str) {
+		settings.setAccuracyFile(new File(str));
 	}
 }

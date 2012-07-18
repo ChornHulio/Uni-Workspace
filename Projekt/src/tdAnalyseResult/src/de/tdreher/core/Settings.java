@@ -4,11 +4,10 @@ import java.io.File;
 import java.util.LinkedList;
 
 public class Settings {
-	// files
 	private LinkedList<File> originFiles = new LinkedList<File>();
 	private LinkedList<File> predictionFiles = new LinkedList<File>();
 	private File outputFile = null;
-	private boolean append = false; // should the output be appended at the end of the given file or not
+	private File accuracyFile = null;
 		
 	public LinkedList<File> getOriginFiles() {
 		return originFiles;
@@ -28,10 +27,10 @@ public class Settings {
 	public void setOutputFile(File outputFile) {
 		this.outputFile = outputFile;
 	}
-	public void setAppendFlag() {
-		append = true;
+	public File getAccuracyFile() {
+		return accuracyFile;
 	}
-	public boolean getAppendFlag() {
-		return append;
+	public void setAccuracyFile(File file) {
+		this.accuracyFile  = file;
 	}
 }

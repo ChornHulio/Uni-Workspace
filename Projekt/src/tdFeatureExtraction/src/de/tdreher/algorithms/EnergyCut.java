@@ -18,6 +18,13 @@ public class EnergyCut {
 	public static double[] cut(double[] input, int energyLevel, int sampleWidth) {
 		// sort input
 		int frames = input.length/sampleWidth - 1;
+		
+		if(frames == 0) {
+			System.err.println("Frames: " + frames);
+			System.err.println("input.length: " + input.length);
+			System.err.println("sampleWidth: " + sampleWidth);
+		}
+		
 		SortArray[] sa = new SortArray[frames];
 		for(int i = 0; i < frames; i++) {
 			double[] tmp = new double[sampleWidth];
