@@ -51,7 +51,7 @@ public class Main {
 			return;
 		}
 		if (originLabels.size() != predictedLabels.size()) {
-			System.out.println(originLabels.size() + " | "
+			System.err.println(originLabels.size() + " | "
 					+ predictedLabels.size());
 			System.err
 					.println("The original files contains not equal labels than the prediction files");

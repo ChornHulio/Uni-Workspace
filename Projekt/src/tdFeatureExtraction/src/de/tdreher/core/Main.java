@@ -24,7 +24,7 @@ public class Main {
 			return;
 		}
 		
-		// extract features				
+		// extract features
 		for(int i = 0; i < settings.getInputFiles().size(); i++) {
 			extractOneFile(settings.getInputFiles().get(i));			
 		}

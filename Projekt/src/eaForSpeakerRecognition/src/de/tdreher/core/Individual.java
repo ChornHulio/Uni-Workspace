@@ -11,15 +11,15 @@ public class Individual implements Comparable<Individual> {
 
 	// parameters
 	private int sampleWidth = 9; // 2 ^ n
-	private int sampleWidthMin = 5;
-	private int sampleWidthMax = 20;
+	private int sampleWidthMin = 7;
+	private int sampleWidthMax = 16;
 	private int slidingRate = 2;
 	private int slidingRateMin = 1;
 	private int slidingRateMax = 10;
 	private String window = "hamming";
 	private int coefficents = 20;
 	private int coefficentsMin = 1;
-	private int coefficentsMax = 39; // smaller than no. of mel-filters in MFCC
+	private int coefficentsMax = 38; // smaller than no. of mel-filters in MFCC
 	private int energyLevel = 90;
 	private int energyLevelMin = 0;
 	private int energyLevelMax = 99;
@@ -40,7 +40,7 @@ public class Individual implements Comparable<Individual> {
 		// init with random values
 		Random rand = new Random();
 		sampleWidth = rand.nextInt(sampleWidthMax - sampleWidthMin + 1)
-				+ sampleWidthMin; // 2 ^ (5 .. 20) -> 32 .. 1048576
+				+ sampleWidthMin; // 2 ^ (5 .. 20) -> 128 .. 65536
 		slidingRate = rand.nextInt(slidingRateMax - slidingRateMin + 1)
 				+ slidingRateMin; // 1 .. 10
 		if (rand.nextDouble() > 0.5) {
@@ -197,15 +197,20 @@ public class Individual implements Comparable<Individual> {
 	}
 
 	public Fitness process() {
+		// debug out
+		System.out.println("sw: " + sampleWidth + " |sr: " + slidingRate + " |co: " + coefficents + " |e: " + energyLevel + " |cs: " + codebookSize + " |i: " + ngIterations);		
+		
 		try {
 			long startTime = System.currentTimeMillis();
 			Runtime runtime = Runtime.getRuntime();
 			Process process = null;
 
 			// delete current files
-			process = runtime.exec("rm -f ../test/ea/*");
+			process = runtime.exec("rm -rf ../test/ea");
 			writeProcessOutput(process);
-
+			process = runtime.exec("mkdir ../test/ea");
+			writeProcessOutput(process);
+			
 			// feature extraction
 			for (int i = 1; i < 11; i++) { // for all speaker
 				String processStr = "java -jar tdFeatureExtraction.jar";
@@ -238,7 +243,7 @@ public class Individual implements Comparable<Individual> {
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
 			}
-
+			
 			// create codebook
 			String processStr = "java -jar tdCreateCodebook.jar";
 			processStr += " -i ../test/ea/mfcc.traindata";
@@ -259,8 +264,8 @@ public class Individual implements Comparable<Individual> {
 			
 			// analyse
 			processStr = "java -jar tdAnalyseResult.jar";
-			processStr += " -i ../test/ea/mfcc.traindata";
-			processStr += " -cf ../test/ea/mfcc.res";
+			processStr += " -i ../test/ea/mfcc.testdata";
+			processStr += " -p ../test/ea/mfcc.res";
 			processStr += " -o ../test/ea/mfcc.analysis";
 			processStr += " -a ../test/ea/mfcc.accuracy";
 			process = runtime.exec(processStr);

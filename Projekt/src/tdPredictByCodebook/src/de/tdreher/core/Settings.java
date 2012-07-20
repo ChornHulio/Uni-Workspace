@@ -44,8 +44,10 @@ public class Settings {
 			this.coefficents = coefficents;
 		else if(this.coefficents == coefficents) // number of coefficents should be the same, than before
 			return;
-		else
+		else {
+			System.err.println("old: " + this.coefficents + " | new: " + coefficents);
 			throw new Exception("False number of coefficents in input file");
+		}
 	}
 	public void setAppendFlag() {
 		append = true;

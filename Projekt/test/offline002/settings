@@ -1,0 +1,15 @@
+MFCC
+	SampleWidth: 512
+	SlidingRate: 2
+	Coefficents: 20
+	EnergyLevel: 90
+	Window: Hamming
+NeuralGas
+	Size: 100
+	Iterationen: 15
+Daten
+	Sprecher: 1..10
+	Training: 1+2
+	Test: 3
+Ergebnis
+	SingleFrames: 68,14

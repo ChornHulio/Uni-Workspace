@@ -19,7 +19,7 @@ public class EnergyCut {
 		// sort input
 		int frames = input.length/sampleWidth - 1;
 		
-		if(frames == 0) {
+		if(frames <= 1) { // TODO delete
 			System.err.println("Frames: " + frames);
 			System.err.println("input.length: " + input.length);
 			System.err.println("sampleWidth: " + sampleWidth);
@@ -37,17 +37,19 @@ public class EnergyCut {
 		
 		// calc energy level
 		int borderIndex = sa.length - (sa.length * (100 - energyLevel) / 100 );
+		if(borderIndex >= sa.length)
+			borderIndex = sa.length - 1;		
 		double borderValue = sa[borderIndex].value;
 		
 		// take all frames above this energy level
 		int index = 0;
-		double[] output = new double[(sa.length - borderIndex) *sampleWidth];
+		double[] output = new double[(sa.length - borderIndex) * sampleWidth];
 		for(int i = 0; i < frames; i++) {
 			double[] tmp = new double[sampleWidth];
 			for(int j = 0; j < sampleWidth; j++) {
 				tmp[j] = input[i*sampleWidth+j];
 			}
-			if(calc(tmp) >= borderValue) {
+			if(calc(tmp) > borderValue) {
 				for(int j = 0; j < sampleWidth; j++) {
 					output[index++] = tmp[j];
 				}
