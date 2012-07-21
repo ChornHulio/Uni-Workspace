@@ -7,13 +7,15 @@ import java.util.Random;
 public class Population {
 	
 	int size = 0;
+	String folder = "";
 	ArrayList<Individual> pop = new ArrayList<Individual>();
 	
-	public Population(int size) {
+	public Population(int size, String foldername) {
 		this.size = size;
+		this.folder = foldername;				
 		pop.clear();
 		for(int i = 0; i < size; i++) {
-			pop.add(new Individual()); // individuals with random values
+			pop.add(new Individual(folder)); // individuals with random values
 		}
 	}
 
@@ -38,7 +40,7 @@ public class Population {
 	}
 
 	private Individual duplicate(Individual individual) {
-		Individual clone = new Individual();
+		Individual clone = new Individual(folder);
 		clone.setSampleWidth(individual.getSampleWidth());
 		clone.setSlidingRate(individual.getSlidingRate());
 		clone.setWindow(individual.getWindow());
@@ -58,7 +60,7 @@ public class Population {
 	}
 
 	public void selection() {
-		truncation();
+		tournament();
 	}
 
 	public ArrayList<Individual> getIndividiuals() {
@@ -72,6 +74,29 @@ public class Population {
 		Collections.sort(pop);
 		while(pop.size() > this.size && this.size >= 1) {
 			pop.remove(1);
+		}
+	}
+	
+	private void tournament() {
+		int tournamentSize = 4;
+		if(size % tournamentSize != 0) {
+			System.err.println("Tournament fits not with the population size!");
+			truncation();
+		} else {
+			Random rand = new Random();
+			ArrayList<Individual> newpop = new ArrayList<Individual>();
+			for(int i = 0; i < size; i++) {
+				ArrayList<Individual> tournament = new ArrayList<Individual>();
+				for(int j = 0; j < tournamentSize; j++) {
+					tournament.add(pop.remove(rand.nextInt(pop.size())));
+				}
+				Collections.sort(tournament);
+				for(int j = 0; j < tournamentSize; j++) {
+					System.out.println(tournament.get(j).getFitness());
+				}
+				newpop.add(tournament.remove(0)); // add the winner
+				pop.addAll(tournament); // push the loosers back
+			}			
 		}
 	}
 

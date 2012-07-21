@@ -16,7 +16,7 @@ public class Fitness {
 	}
 
 	public double getFitness() {
-		return 0.2 * -1 * time + 0.8 * accuracy; // time is negativ, but not so important than accuracy
+		return (1.0 - 1.0 / (1 + Math.exp((double) -time/100000.0))) * accuracy;
 	}
 	
 	public long getTime() {

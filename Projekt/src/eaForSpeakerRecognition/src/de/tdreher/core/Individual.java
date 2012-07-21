@@ -34,9 +34,15 @@ public class Individual implements Comparable<Individual> {
 	private double mutationRate = 0.1;
 
 	// fitness
-	Fitness fitness = new Fitness(0, 0);
+	Fitness fitness = null;
+	
+	// foldername
+	String folder = "ea";
 
-	public Individual() {
+	public Individual(String folder) {
+		// set foldername
+		this.folder = folder;
+		
 		// init with random values
 		Random rand = new Random();
 		sampleWidth = rand.nextInt(sampleWidthMax - sampleWidthMin + 1)
@@ -196,95 +202,99 @@ public class Individual implements Comparable<Individual> {
 		return this.fitness.getAccuracy();
 	}
 
-	public Fitness process() {
-		// debug out
-		System.out.println("sw: " + sampleWidth + " |sr: " + slidingRate + " |co: " + coefficents + " |e: " + energyLevel + " |cs: " + codebookSize + " |i: " + ngIterations);		
-		
-		try {
-			long startTime = System.currentTimeMillis();
-			Runtime runtime = Runtime.getRuntime();
-			Process process = null;
-
-			// delete current files
-			process = runtime.exec("rm -rf ../test/ea");
-			writeProcessOutput(process);
-			process = runtime.exec("mkdir ../test/ea");
-			writeProcessOutput(process);
+	public Fitness process() {		
+		if(fitness == null) {
 			
-			// feature extraction
-			for (int i = 1; i < 11; i++) { // for all speaker
-				String processStr = "java -jar tdFeatureExtraction.jar";
-				processStr += " -i ../speaker/" + i + "/1.wav";
-				processStr += " -i ../speaker/" + i + "/2.wav";
-				processStr += " -l " + i;
-				processStr += " -o ../test/ea/mfcc.traindata";
-				processStr += " -sw " + (int) Math.pow(2,sampleWidth);
-				processStr += " -sr " + slidingRate;
-				processStr += " -c " + coefficents;
-				processStr += " -w " + window;
-				processStr += " -e " + energyLevel;
-				processStr += " -a --mfcc";
+			System.out.println("sw: " + sampleWidth + " |sr: " + slidingRate + " |co: " + coefficents 
+					+ " |e: " + energyLevel + " |cs: " + codebookSize + " |i: " + ngIterations);		
+			
+			try {
+				long startTime = System.currentTimeMillis();
+				Runtime runtime = Runtime.getRuntime();
+				Process process = null;
+	
+				// delete current files
+				process = runtime.exec("rm -rf ../test/" + folder);
+				writeProcessOutput(process);
+				process = runtime.exec("mkdir ../test/" + folder);
+				writeProcessOutput(process);
+				
+				// feature extraction
+				for (int i = 1; i < 11; i++) { // for all speaker
+					String processStr = "java -jar tdFeatureExtraction.jar";
+					processStr += " -i ../speaker/" + i + "/1.wav";
+					processStr += " -i ../speaker/" + i + "/2.wav";
+					processStr += " -l " + i;
+					processStr += " -o ../test/"+folder+"/mfcc.traindata";
+					processStr += " -sw " + (int) Math.pow(2,sampleWidth);
+					processStr += " -sr " + slidingRate;
+					processStr += " -c " + coefficents;
+					processStr += " -w " + window;
+					processStr += " -e " + energyLevel;
+					processStr += " -a --mfcc";
+					process = runtime.exec(processStr);
+					writeProcessOutput(process);
+				}
+	
+				// test features
+				for (int i = 1; i < 11; i++) { // for all speaker
+					String processStr = "java -jar tdFeatureExtraction.jar";
+					processStr += " -i ../speaker/" + i + "/3.wav";
+					processStr += " -l " + i;
+					processStr += " -o ../test/"+folder+"/mfcc.testdata";
+					processStr += " -sw " + (int) Math.pow(2,sampleWidth);
+					processStr += " -sr " + slidingRate;
+					processStr += " -c " + coefficents;
+					processStr += " -w " + window;
+					processStr += " -e " + energyLevel;
+					processStr += " -a --mfcc";
+					process = runtime.exec(processStr);
+					writeProcessOutput(process);
+				}
+				
+				// create codebook
+				String processStr = "java -jar tdCreateCodebook.jar";
+				processStr += " -i ../test/"+folder+"/mfcc.traindata";
+				processStr += " -o ../test/"+folder+"/mfcc.ng";
+				processStr += " -s " + codebookSize;
+				processStr += " -it " + ngIterations;
+				processStr += " -a";
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
-			}
-
-			// test features
-			for (int i = 1; i < 11; i++) { // for all speaker
-				String processStr = "java -jar tdFeatureExtraction.jar";
-				processStr += " -i ../speaker/" + i + "/3.wav";
-				processStr += " -l " + i;
-				processStr += " -o ../test/ea/mfcc.testdata";
-				processStr += " -sw " + (int) Math.pow(2,sampleWidth);
-				processStr += " -sr " + slidingRate;
-				processStr += " -c " + coefficents;
-				processStr += " -w " + window;
-				processStr += " -e " + energyLevel;
-				processStr += " -a --mfcc";
+				
+				// prediction with testdata
+				processStr = "java -jar tdPredictByCodebook.jar";
+				processStr += " -ff ../test/"+folder+"/mfcc.testdata";
+				processStr += " -cf ../test/"+folder+"/mfcc.ng";
+				processStr += " -o ../test/"+folder+"/mfcc.res";
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
+				
+				// analyse
+				processStr = "java -jar tdAnalyseResult.jar";
+				processStr += " -i ../test/"+folder+"/mfcc.testdata";
+				processStr += " -p ../test/"+folder+"/mfcc.res";
+				processStr += " -o ../test/"+folder+"/mfcc.analysis";
+				processStr += " -a ../test/"+folder+"/mfcc.accuracy";
+				process = runtime.exec(processStr);
+				writeProcessOutput(process);
+				
+				// read accuracy
+				double accuracy = readAccuracy("../test/"+folder+"/mfcc.accuracy");
+				
+				// stop time
+				long endTime = System.currentTimeMillis();
+	
+				// create fitness and return it
+				return new Fitness(endTime - startTime, accuracy);
+	
+			} catch (Exception e) {
+				System.err.println("error while processing indivual:");
+				e.printStackTrace();
+				return new Fitness(Long.MAX_VALUE, Double.MIN_VALUE);
 			}
-			
-			// create codebook
-			String processStr = "java -jar tdCreateCodebook.jar";
-			processStr += " -i ../test/ea/mfcc.traindata";
-			processStr += " -o ../test/ea/mfcc.ng";
-			processStr += " -s " + codebookSize;
-			processStr += " -it " + ngIterations;
-			processStr += " -a";
-			process = runtime.exec(processStr);
-			writeProcessOutput(process);
-			
-			// prediction with testdata
-			processStr = "java -jar tdPredictByCodebook.jar";
-			processStr += " -ff ../test/ea/mfcc.testdata";
-			processStr += " -cf ../test/ea/mfcc.ng";
-			processStr += " -o ../test/ea/mfcc.res";
-			process = runtime.exec(processStr);
-			writeProcessOutput(process);
-			
-			// analyse
-			processStr = "java -jar tdAnalyseResult.jar";
-			processStr += " -i ../test/ea/mfcc.testdata";
-			processStr += " -p ../test/ea/mfcc.res";
-			processStr += " -o ../test/ea/mfcc.analysis";
-			processStr += " -a ../test/ea/mfcc.accuracy";
-			process = runtime.exec(processStr);
-			writeProcessOutput(process);
-			
-			// read accuracy
-			double accuracy = readAccuracy("../test/ea/mfcc.accuracy");
-			
-			// stop time
-			long endTime = System.currentTimeMillis();
-
-			// create fitness and return it
-			return new Fitness(endTime - startTime, accuracy);
-
-		} catch (Exception e) {
-			System.err.println("error while processing indivual:");
-			System.err.println(e.getMessage());
-			return new Fitness(Long.MAX_VALUE, Double.MIN_VALUE);
 		}
+		return fitness;
 	}
 
 	@Override
@@ -320,6 +330,7 @@ public class Individual implements Comparable<Individual> {
 			String line = in.readLine(); // read first line
 			if(line != null) {
 				line = line.trim();
+				line = line.replace(',', '.');
 				return Double.parseDouble(line);
 			}
 		} catch (IOException e) {
