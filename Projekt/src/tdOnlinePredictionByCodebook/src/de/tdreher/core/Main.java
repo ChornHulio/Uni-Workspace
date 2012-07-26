@@ -9,21 +9,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
-
 import de.tdreher.algorithms.NearestNeighbor;
+import de.tdreher.audio.Microphone;
 import de.tdreher.audio.WavFile;
 import de.tdreher.common.ArgInterpreter;
 
 public class Main {
 
-	private static final int WINDOW_SIZE = 512 * 100;
+	private static int windowSize = 512 * 10; // 512 = 32ms
 	private static Settings settings = null;
-	private static Features features = new Features();
+	private static Features features = null;
 	private static Features codebooks = new Features();
 
 	public static void main(String[] args) throws Exception {
@@ -52,35 +47,41 @@ public class Main {
 		// clear output file if it is necassary
 		clearOutputFile();
 
+		// init and flush microphone
+		Microphone micro = new Microphone(windowSize);
+		micro.flushMicrophone();
+
 		File audioFile = new File("online.wav");
 		File featureFile = new File("online.mfcc");
-		int counter = 50; // TODO delete
-		while (counter-- > 0) {
+		NearestNeighbor nn = new NearestNeighbor(codebooks);
+		Runtime runtime = Runtime.getRuntime();
+		while (true) {
 			try {
 				// read data from microphone
-				double[] rawData = readLive();
+				double[] rawData = micro.readLive();
+				micro.flushMicrophone();
 
 				// write a wav file
-				WavFile wavFile = WavFile.newWavFile(audioFile, 1, WINDOW_SIZE,
-						16, 16000);
+				WavFile wavFile = WavFile.newWavFile(audioFile, 1, windowSize, 16, 16000);
 				wavFile.writeFrames(rawData, rawData.length);
 				wavFile.close();
 
-				// extract features
-				Runtime runtime = Runtime.getRuntime();
+				// extract features				
 				Process process = runtime
-						.exec("java -jar ./tdFeatureExtraction.jar -i "
-								+ audioFile.getCanonicalPath() + " -o "
-								+ featureFile.getCanonicalPath() + " -l 42");
+						.exec("java -jar ./tdFeatureExtraction.jar " +
+								"-i " + audioFile.getCanonicalPath() + 
+								" -o " + featureFile.getCanonicalPath() + 
+								" -l 42" +
+								" -e 0");
 				writeProcessOutput(process);
 
-				// read input files (feature vectors)
+				// read input files (feature vectors)		
+				features = new Features();
 				readOneFile(featureFile, true);
 
-				// get nearest neighbor between n feature vectors and the
-				// codebooks
-				NearestNeighbor nn = new NearestNeighbor(codebooks);
+				// get nearest neighbor between n feature vectors and the codebooks	
 				int[] labels = nn.calc(features, settings.getNumber());
+				System.out.println(nn.getWinner());
 
 				// write in output file
 				writeOutputFile(labels);
@@ -163,7 +164,6 @@ public class Main {
 			for (int i = 0; i < labels.length; i++) {
 				str += labels[i] + System.getProperty("line.separator");
 			}
-			System.out.println(str);
 			fw.write(str);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -178,50 +178,9 @@ public class Main {
 		}
 	}
 
-	private static double[] readLive() throws LineUnavailableException {
-		AudioFormat format;
-		TargetDataLine line;
-		DataLine.Info info;
-
-		format = new AudioFormat(16000.0f, 16, 1, true, false); // 16kHz
-																// 16bit
-																// mono
-																// identisch
-																// zu den
-																// waves
-		info = new DataLine.Info(TargetDataLine.class, format);
-		line = (TargetDataLine) AudioSystem.getLine(info);
-
-		int bufferSize = WINDOW_SIZE; // hier für ein fenster.
-		// es kann notwenig sein den buffer größer zu halten und die
-		// fensterfunktion danach zu berechene um die anzahl der zugriffe
-		// auf die line zu minimieren.
-
-		line.open(format, bufferSize * 2);
-		byte[] data = new byte[bufferSize * 2];
-		double[] rawData = new double[bufferSize];
-
-		line.flush();// eventuell altes zeug aus dem puffer werfen // TODO
-						// only the first time
-		line.start();// hier empfehlen sich schleifen, und multi threading
-						// um den eingang permanent auszulesen
-		// Read the next chunk of data from the TargetDataLine.
-		int numBytesRead = line.read(data, 0, data.length);
-		// Save this chunk of data.
-		double level = Long.MAX_VALUE >> (64 - 16); // on a 64 bit machine
-		for (int i = 0; i < bufferSize; i++) { // siehe offline fall
-			int firstByte = (0x000000FF & ((int) data[2 * i + 1]));
-			int secondByte = (0x000000FF & ((int) data[2 * i]));
-			short result = (short) (firstByte << 8 | secondByte);
-			rawData[i] = ((double) result) / level;
-		}
-		line.stop();
-		return rawData;
-	}
-
 	static void writeProcessOutput(Process process) throws Exception {
 		InputStreamReader tempReader = new InputStreamReader(
-				new BufferedInputStream(process.getInputStream()));
+				new BufferedInputStream(process.getErrorStream()));
 		BufferedReader reader = new BufferedReader(tempReader);
 		while (true) {
 			String line = reader.readLine();

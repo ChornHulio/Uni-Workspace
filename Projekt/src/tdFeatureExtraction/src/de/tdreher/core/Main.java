@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Random;
 
 import de.tdreher.algorithms.EnergyCut;
 import de.tdreher.audio.WavFile;
@@ -37,7 +36,6 @@ public class Main {
 		double[] buffer = null;
 		double[] audio = null;
 		WavFile readWavFile = null;
-		int milliseconds = -1; // only for testing purpose
 		try {
 			// read
 			readWavFile = WavFile.openWavFile(fileIn);
@@ -49,30 +47,15 @@ public class Main {
 			readWavFile.readFrames(buffer, buffer.length);
 
 			// copy buffer
-			int numFrames = 0;
-			if(milliseconds < 0) {
-				numFrames = bufferSize;					
-			} else {
-				numFrames = 16*milliseconds;
-			}
+			int numFrames = bufferSize;				
 			readWavFile.close();
 			audio = new double[numFrames];
-			if(milliseconds < 0) {
-				// take everthing
-				for(int k = 0; k < numFrames; k++) {
-					audio[k] = buffer[k]; 
-				}
-			} else {
-				// take samples from a random place
-				Random rand = new Random();
-				int k = 0;
-				int start = rand.nextInt(bufferSize - settings.getSampleWidth());
-				for(int j = start; j < start + settings.getSampleWidth() + numFrames; j++) {
-					audio[k] = buffer[j];
-					k++;			
-				}
-			}
-						
+			
+			// take everthing
+			for(int k = 0; k < numFrames; k++) {
+				audio[k] = buffer[k]; 
+			}				
+			
 			// energy level
 			double[] cuttedAudio = EnergyCut.cut(audio, settings.getEnergyLevel(), settings.getSampleWidth());
 			

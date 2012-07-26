@@ -67,13 +67,10 @@ public class Population {
 		return pop;
 	}
 	
-	/**
-	 * fittest individuals survive (not very good algorithm)
-	 */
 	private void truncation() {
 		Collections.sort(pop);
 		while(pop.size() > this.size && this.size >= 1) {
-			pop.remove(1);
+			pop.remove(0);
 		}
 	}
 	
@@ -91,12 +88,10 @@ public class Population {
 					tournament.add(pop.remove(rand.nextInt(pop.size())));
 				}
 				Collections.sort(tournament);
-				for(int j = 0; j < tournamentSize; j++) {
-					System.out.println(tournament.get(j).getFitness());
-				}
-				newpop.add(tournament.remove(0)); // add the winner
+				newpop.add(tournament.remove(tournamentSize-1)); // add the winner
 				pop.addAll(tournament); // push the loosers back
-			}			
+			}
+			pop = newpop;
 		}
 	}
 

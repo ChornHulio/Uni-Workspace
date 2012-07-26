@@ -1,6 +1,7 @@
 package de.tdreher.core;
 
 import java.io.BufferedInputStream;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,14 +36,14 @@ public class Individual implements Comparable<Individual> {
 
 	// fitness
 	Fitness fitness = null;
-	
+
 	// foldername
 	String folder = "ea";
 
 	public Individual(String folder) {
 		// set foldername
 		this.folder = folder;
-		
+
 		// init with random values
 		Random rand = new Random();
 		sampleWidth = rand.nextInt(sampleWidthMax - sampleWidthMin + 1)
@@ -202,31 +203,39 @@ public class Individual implements Comparable<Individual> {
 		return this.fitness.getAccuracy();
 	}
 
-	public Fitness process() {		
-		if(fitness == null) {
-			
-			System.out.println("sw: " + sampleWidth + " |sr: " + slidingRate + " |co: " + coefficents 
-					+ " |e: " + energyLevel + " |cs: " + codebookSize + " |i: " + ngIterations);		
-			
+	public Fitness process() {
+		if (fitness == null) {
+
+			System.out.println("sw: " + sampleWidth + " |sr: " + slidingRate
+					+ " |co: " + coefficents + " |e: " + energyLevel + " |cs: "
+					+ codebookSize + " |i: " + ngIterations);
+
 			try {
 				long startTime = System.currentTimeMillis();
 				Runtime runtime = Runtime.getRuntime();
 				Process process = null;
-	
+
 				// delete current files
 				process = runtime.exec("rm -rf ../test/" + folder);
 				writeProcessOutput(process);
+				process.getInputStream().close(); 
+				process.getOutputStream().close(); 
+				process.getErrorStream().close();
+
 				process = runtime.exec("mkdir ../test/" + folder);
 				writeProcessOutput(process);
-				
+				process.getInputStream().close(); 
+				process.getOutputStream().close(); 
+				process.getErrorStream().close();
+
 				// feature extraction
 				for (int i = 1; i < 11; i++) { // for all speaker
 					String processStr = "java -jar tdFeatureExtraction.jar";
 					processStr += " -i ../speaker/" + i + "/1.wav";
 					processStr += " -i ../speaker/" + i + "/2.wav";
 					processStr += " -l " + i;
-					processStr += " -o ../test/"+folder+"/mfcc.traindata";
-					processStr += " -sw " + (int) Math.pow(2,sampleWidth);
+					processStr += " -o ../test/" + folder + "/mfcc.traindata";
+					processStr += " -sw " + (int) Math.pow(2, sampleWidth);
 					processStr += " -sr " + slidingRate;
 					processStr += " -c " + coefficents;
 					processStr += " -w " + window;
@@ -234,15 +243,18 @@ public class Individual implements Comparable<Individual> {
 					processStr += " -a --mfcc";
 					process = runtime.exec(processStr);
 					writeProcessOutput(process);
+					process.getInputStream().close(); 
+					process.getOutputStream().close(); 
+					process.getErrorStream().close();
 				}
-	
+
 				// test features
 				for (int i = 1; i < 11; i++) { // for all speaker
 					String processStr = "java -jar tdFeatureExtraction.jar";
 					processStr += " -i ../speaker/" + i + "/3.wav";
 					processStr += " -l " + i;
-					processStr += " -o ../test/"+folder+"/mfcc.testdata";
-					processStr += " -sw " + (int) Math.pow(2,sampleWidth);
+					processStr += " -o ../test/" + folder + "/mfcc.testdata";
+					processStr += " -sw " + (int) Math.pow(2, sampleWidth);
 					processStr += " -sr " + slidingRate;
 					processStr += " -c " + coefficents;
 					processStr += " -w " + window;
@@ -250,44 +262,57 @@ public class Individual implements Comparable<Individual> {
 					processStr += " -a --mfcc";
 					process = runtime.exec(processStr);
 					writeProcessOutput(process);
+					process.getInputStream().close(); 
+					process.getOutputStream().close(); 
+					process.getErrorStream().close();
 				}
-				
+
 				// create codebook
 				String processStr = "java -jar tdCreateCodebook.jar";
-				processStr += " -i ../test/"+folder+"/mfcc.traindata";
-				processStr += " -o ../test/"+folder+"/mfcc.ng";
+				processStr += " -i ../test/" + folder + "/mfcc.traindata";
+				processStr += " -o ../test/" + folder + "/mfcc.ng";
 				processStr += " -s " + codebookSize;
 				processStr += " -it " + ngIterations;
 				processStr += " -a";
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
-				
+				process.getInputStream().close(); 
+				process.getOutputStream().close(); 
+				process.getErrorStream().close();
+
 				// prediction with testdata
 				processStr = "java -jar tdPredictByCodebook.jar";
-				processStr += " -ff ../test/"+folder+"/mfcc.testdata";
-				processStr += " -cf ../test/"+folder+"/mfcc.ng";
-				processStr += " -o ../test/"+folder+"/mfcc.res";
+				processStr += " -ff ../test/" + folder + "/mfcc.testdata";
+				processStr += " -cf ../test/" + folder + "/mfcc.ng";
+				processStr += " -o ../test/" + folder + "/mfcc.res";
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
-				
+				process.getInputStream().close(); 
+				process.getOutputStream().close(); 
+				process.getErrorStream().close();
+
 				// analyse
 				processStr = "java -jar tdAnalyseResult.jar";
-				processStr += " -i ../test/"+folder+"/mfcc.testdata";
-				processStr += " -p ../test/"+folder+"/mfcc.res";
-				processStr += " -o ../test/"+folder+"/mfcc.analysis";
-				processStr += " -a ../test/"+folder+"/mfcc.accuracy";
+				processStr += " -i ../test/" + folder + "/mfcc.testdata";
+				processStr += " -p ../test/" + folder + "/mfcc.res";
+				processStr += " -o ../test/" + folder + "/mfcc.analysis";
+				processStr += " -a ../test/" + folder + "/mfcc.accuracy";
 				process = runtime.exec(processStr);
 				writeProcessOutput(process);
-				
+				process.getInputStream().close(); 
+				process.getOutputStream().close(); 
+				process.getErrorStream().close();
+
 				// read accuracy
-				double accuracy = readAccuracy("../test/"+folder+"/mfcc.accuracy");
-				
+				double accuracy = readAccuracy("../test/" + folder
+						+ "/mfcc.accuracy");
+
 				// stop time
 				long endTime = System.currentTimeMillis();
-	
+
 				// create fitness and return it
 				return new Fitness(endTime - startTime, accuracy);
-	
+
 			} catch (Exception e) {
 				System.err.println("error while processing indivual:");
 				e.printStackTrace();
@@ -310,7 +335,7 @@ public class Individual implements Comparable<Individual> {
 		return 0;
 	}
 
-	private void writeProcessOutput(Process process) throws Exception {
+	private void writeProcessOutput(Process process) throws Exception {		
 		InputStreamReader tempReader = new InputStreamReader(
 				new BufferedInputStream(process.getErrorStream()));
 		BufferedReader reader = new BufferedReader(tempReader);
@@ -320,6 +345,7 @@ public class Individual implements Comparable<Individual> {
 				break;
 			System.out.println(line);
 		}
+		reader.close();
 	}
 
 	private double readAccuracy(String filename) {
@@ -328,7 +354,7 @@ public class Individual implements Comparable<Individual> {
 			fr = new FileReader(filename);
 			BufferedReader in = new BufferedReader(fr);
 			String line = in.readLine(); // read first line
-			if(line != null) {
+			if (line != null) {
 				line = line.trim();
 				line = line.replace(',', '.');
 				return Double.parseDouble(line);

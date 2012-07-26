@@ -4,7 +4,6 @@ public class Main {
 
 	// settings
 	static int sizeOfPop = 12;
-	static int generations = 100;
 
 	// settings for mutation
 	static int mutationMin = 1;
@@ -23,13 +22,15 @@ public class Main {
 		
 		Logger.clearLogFile();
 		pop = new Population(sizeOfPop, foldername);
-		for(int i = 0; i < generations; i++) {
-			System.out.println("Generation: " + i);
+		int generation = 0;
+		while(true) {
+			generation++;
+			System.out.println("Generation: " + generation);
 			pop.adaptMutationRate(mutationMin, mutationMax, learnOverall, learnProp);
 			pop.mutation();
 			pop.evaluation(); // inclusive processing of speaker recognition
 			pop.selection();
-			Logger.log(i, pop);
+			Logger.log(generation, pop);
 		}
 	}
 }

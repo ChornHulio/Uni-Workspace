@@ -44,6 +44,7 @@ public class ArgInterpreter {
 		return settings;
 	}
 
+	// TODO adapt it
 	private static Settings printHelp() {
 		System.out.println();
 		System.out.println("tdPredictByCodebook - predict which label is meant for the given feature vectors");
