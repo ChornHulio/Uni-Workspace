@@ -1,4 +1,4 @@
-filename <- "eaAll"
+filename <- "ea017"
 dataRaw <- as.matrix(read.table(paste(filename,".csv",sep=""), sep=";"))
 
 # convert data
@@ -71,6 +71,7 @@ pareto <- matrix(nrow=length(newPop), ncol=2)
 for(i in 1:length(newPop)) {
 	pareto[i,1] <- data[newPop[i],10]
 	pareto[i,2] <- data[newPop[i],11]
+	print(data[newPop[i],])
 }
 
 # plot

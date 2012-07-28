@@ -1,0 +1,192 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                              % 
+% Autor:  Dominik Bacher                                                       %
+% Datum:  26.01.2009                                                           % 
+% Datei:  praesentation.tex                                                    %
+%                                                                              %
+% Letzte Änderung: Tobias Dreher                                               %
+% Datum:           06.03.2011                                                  %
+%                                                                              % 
+% Quelle: http://www2.informatik.hu-berlin.de/~mischulz/beamer.html            % 
+%                                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{beamer}
+%\documentclass[handout,xcolor=table]{beamer}
+%\documentclass[class=article,a4paper,11pt,twoside]{beamer}% handout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sprache, Schriftsatz und Schriftart
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage{lmodern} %Schriftart
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Farbdefinitionen
+\usepackage{xcolor}
+\usepackage{color}
+\definecolor{lightblue}{rgb}{0.8,0.85,1}
+\definecolor{lightred}{rgb}{1.0,0.5,0.5}
+\definecolor{lightgray}{rgb}{0.8,0.8,0.8}
+\definecolor{darkblue}{HTML}{004494}
+\definecolor{darkred}{rgb}{.6,0,0}
+\definecolor{darkgreen}{rgb}{0,.6,0}
+\definecolor{red}{rgb}{.98,0,0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tabellen
+\usepackage{longtable}  % fuer Tabellen die ueber die Seitengrenze gehen
+\usepackage{tabularx}
+\renewcommand{\arraystretch}{1.4} % Zeilenabstand
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Absatz
+\parskip 6pt plus 1pt minus 1pt	% Setzt den vertikalen Abstand zwischen
+					% Absaetzen auf 12 pt. Das Plus und
+					% Minus fuegt Glue ein, d. h. TeX darf
+					% den Abstand um einen Punkt
+					% vergroessern oder verkleinern, um ein
+					% gutes Layout zu erzeugen
+
+\parindent 0pt      % Setzt die Einrückung der ersten Zeile auf 0 Pt
+
+\usepackage{url}
+\usepackage{lastpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mehrere Spalten        \begin{multicols}{2}[] \end{multicols}
+\usepackage{multicol}
+\setlength{\columnsep}{2em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Grafik
+\usepackage{epsfig}            
+\usepackage{graphicx}
+\usepackage{pgf}
+%\usepackage{subfigure}
+%\usepackage{subfig}
+\usepackage{capt-of}
+\usepackage{wrapfig}
+\usepackage{sidecap}
+%\usepackage{pstricks}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Farbige Hyperlinks
+\usepackage{hyperref}
+\hypersetup{linktocpage=true,
+        colorlinks=true,
+        linkcolor=darkblue,
+        citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mathe
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{booktabs}
+\usepackage{dcolumn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sonderzeichen
+\usepackage{pifont}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Listings
+\usepackage{listings}
+
+% Programmiersprache
+\lstset{language=PHP}
+
+% Farben
+\lstset{keywordstyle=\color{blue},
+        basicstyle=\small\ttfamily,
+        stringstyle=\color{red}\ttfamily}
+
+% Rahmen
+%\lstset{frame=[t][l][r][b]}
+
+% Zeilennummern
+\lstset{numbers=left,
+        numberstyle=\tiny,
+        stepnumber=1,
+        numbersep=10pt}
+
+% Einruecken
+\lstset{breakautoindent = true,
+        breakindent = 2em,
+        breaklines = true,
+        showspaces=false,
+        showtabs=false,
+        showstringspaces=false}
+
+\newcommand{\codefile}{
+        \lstset{backgroundcolor=\color{lightblue},
+                numbers=left}}
+
+\newcommand{\logfile}{
+        \lstset{backgroundcolor=\color{lightgray},
+                numbers=none}}
+
+\newcommand{\xmlfile}{
+        \lstset{backgroundcolor=\color{lightgray},
+                numbers=none}}
+
+% Keywords
+\lstset{morekeywords={new,mysqli,prepare,bind_param,execute}}
+
+%------------------------------------------------------------------------------
+% Style der Praessentation
+\mode<presentation>{
+	\usetheme{Frankfurt}
+			% AnnArbor | Antibes | Bergen |
+			% Berkeley | Berlin | Boadilla |
+			% boxes | CambridgeUS | Copenhagen |
+			% Darmstadt | default | Dresden |
+			% Frankfurt | Goettingen |Hannover |
+			% Ilmenau | JuanLesPins | Luebeck |
+			% Madrid | Malmoe | Marburg |
+			% Montpellier | PaloAlto | Pittsburgh |
+			% Rochester | Singapore | Szeged |
+			% Warsaw
+
+	\usecolortheme{default}
+			% albatross | beaver | beetle |
+			% crane | default | dolphin |
+			% dove | fly | lily | orchid |
+			% rose |seagull | seahorse |
+			% sidebartab | structure |
+			% whale | wolverine
+
+	\usefonttheme{default}
+			% default | professionalfonts | serif |
+			% structurebold | structureitalicserif |
+			% structuresmallcapsserif
+
+	\useinnertheme{default}
+			% circles | default | inmargin |
+			% rectangles | rounded
+
+	\useoutertheme{default}
+			% default | infolines | miniframes |
+			% shadow | sidebar | smoothbars |
+			% smoothtree | split | tree
+
+	% Halbtransparente Overlays:
+	\setbeamercovered{transparent}
+
+	% Abschalten der kleinen Navigationsleiste am unteren Rand:
+	\beamertemplatenavigationsymbolsempty
+
+	% Seitenzahlen in Fußzeile einfügen
+	%\setbeamertemplate{footline}[frame number]
+	%\setbeamertemplate{footline}{
+	%	\raisebox{0.15cm}{
+	%		\hspace*{0.5em} 
+	%		\insertauthor, \datum
+	%		\hspace*{0.805\paperwidth} %Muss evtl. angepasst werden
+	%		\insertframenumber /\inserttotalframenumber
+	%		}
+	%}
+}
+\mode<article>{}

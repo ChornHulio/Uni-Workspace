@@ -9,6 +9,11 @@ ea008: tournament, aborted, bug in selection
 ea009: tournament, aborted, duration 3 day, bug in selection
 ea010: tournament, aborted, duration 3 day, bug in selection
 ea011: tournament, ended, duration 3 day
-ea012: tournament, wsl50, binB, start 2012-07-24 6pm
+ea012: tournament, ended, duration 4 day
 ea013: truncation, ended, duration 3 day
 ea014: truncation, ended, duration 3 day
+ea015: truncation, wsl50, binA, started 2012-07-28 6 pm
+ea016: truncation, wsl50, binB, started 2012-07-28 6 pm
+ea017: truncation, ended, duration 1 day
+ea018: tournament, wsl51, binC, started 2012-07-28 6 pm
+ea019: tournament, wsl51, binD, started 2012-07-28 6 pm

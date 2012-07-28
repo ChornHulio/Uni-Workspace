@@ -12,8 +12,8 @@ public class Individual implements Comparable<Individual> {
 
 	// parameters
 	private int sampleWidth = 9; // 2 ^ n
-	private int sampleWidthMin = 7;
-	private int sampleWidthMax = 16;
+	private int sampleWidthMin = 9; // 7
+	private int sampleWidthMax = 9; // 16
 	private int slidingRate = 2;
 	private int slidingRateMin = 1;
 	private int slidingRateMax = 10;

@@ -1,0 +1,56 @@
+%
+% Autor:  Tobias Dreher
+% Datum:  28.07.2012
+% 
+
+\include{header}
+
+%------------------------------------------------------------------------------
+% Titelseite
+% Titel des Vortrages
+\title[Sprechererkennung]{Sprechererkennung}
+
+% Untertitel
+\subtitle[Projekt]{Projekt}
+
+% Autor festlegen
+\author[Tobias Dreher]{Tobias Dreher}
+
+% Angabe des Institutes
+\institute[Universität Ulm]{Universität Ulm}
+
+% Datum der Präsentation, alternativ kann mittels \date{\today} auch das aktuelle
+% Datum eingetragen werden.
+\newcommand{\datum}{31.07.2012}
+
+% Setzt Thema in den PDF-Dokument-Eigenschaften
+\subject{\title}
+
+%------------------------------------------------------------------------------
+% Deckblatt
+\begin{document}
+\begin{frame}
+	\thispagestyle{empty}
+	\titlepage
+\end{frame}
+
+% Gliederung
+\begin{frame}{Gliederung}
+	\thispagestyle{empty}
+	%\tableofcontents[hideallsubsections ,pausesections]   %Inhaltsverzeichnis ohne Subsections
+	\tableofcontents[hideallsubsections]   %Inhaltsverzeichnis ohne Subsections ohne +-
+\end{frame}
+
+%------------------------------------------------------------------------------
+% Folien
+
+\include{slides/aufgabenstellung}
+\include{slides/theorie}
+\include{slides/implementierung}
+\include{slides/ergebnisse}
+\include{slides/online}
+\include{slides/diskussion}
+\include{slides/ende}
+
+%------------------------------------------------------------------------------
+\end{document}

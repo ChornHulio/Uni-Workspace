@@ -1,0 +1,29 @@
+MFCC
+	SampleWidth: 512
+	SlidingRate: 2
+	Coefficents: 20
+	EnergyLevel: 90
+	Window: Hamming
+LPC
+	SampleWidth: 512
+	SlidingRate: 2
+	Coefficents: 12
+	EnergyLevel: 90
+	Window: Hamming
+Data
+	Speaker 1..10
+NeuralGas
+	CodebookSize: 100
+	Iterations: 15
+SVM
+	C: 1
+	G: 1
+
+lpcNg001: 40.09 %
+lpcNg002: 39.75 %
+lpcSvm001: linear, c=1, g=1, 46.14 %
+lpcSvm002: rbf, c=1, g=1, 53.97 %
+mfccNg001: 70,82 %
+mfccNg002: 71,25 %
+mfccSvm001: linear, c=1, g=1, 71.72 %
+mfccSvm002: rbf, c=1, g=1, 80.44 %
