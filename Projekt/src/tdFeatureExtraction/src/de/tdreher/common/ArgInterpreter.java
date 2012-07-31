@@ -67,12 +67,12 @@ public class ArgInterpreter {
 
 	private static Settings printHelp() {
 		System.out.println();
-		System.out.println("tdFeatureExtraction - extract feature vectors from one or more given .wav-files");
+		System.out.println("FeatureExtraction - extract feature vectors from one or more given .wav-files");
 		System.out.println("Author: Tobias Dreher");
 		System.out.println("Date: July 2012");
 		System.out.println();
 		System.out.println("USAGE:");
-		System.out.println("\tjava -jar tdFeatureExtraction [options]");
+		System.out.println("\tjava -jar FeatureExtraction [options]");
 		System.out.println("\tThe options -i, -o and -l are mandatory!");
 		System.out.println();
 		System.out.println("OPTIONS:");
@@ -93,12 +93,12 @@ public class ArgInterpreter {
 		System.out.println();
 		System.out.println("EXAMPLES:");
 		System.out.println("\t1.) extract input.wav with label '1' and the standard values (MFCC, etc.)");
-		System.out.println("\t\tjava -jar tdFeatureExtraction -i input.wav -l 1 -o features.txt");
+		System.out.println("\t\tjava -jar FeatureExtraction -i input.wav -l 1 -o features.txt");
 		System.out.println("\t2.) extract two input files with label '5' and the standard values (MFCC, etc.)");
-		System.out.println("\t\tjava -jar tdFeatureExtraction -i input_01.wav -i input_02.wav -l 5 -o features.txt");
+		System.out.println("\t\tjava -jar FeatureExtraction -i input_01.wav -i input_02.wav -l 5 -o features.txt");
 		System.out.println("\t3.) extract input.wav with label '42', the LPC method and a vector size of 12 and \n" +
 				"\t\tappend the output to the given file (if it exists or not)");
-		System.out.println("\t\tjava -jar tdFeatureExtraction -i input.wav -l 42 -o features.txt --lpc -c 12 -a");
+		System.out.println("\t\tjava -jar FeatureExtraction -i input.wav -l 42 -o features.txt --lpc -c 12 -a");
 		return null;
 	}
 	

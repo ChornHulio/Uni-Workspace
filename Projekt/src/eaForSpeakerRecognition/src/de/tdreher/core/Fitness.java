@@ -16,7 +16,7 @@ public class Fitness {
 	}
 
 	public double getFitness() {
-		return (1.0 - 1.0 / (1 + Math.exp((double) -time/100000.0))) * accuracy;
+		return (1.0 - 1.0 / (1 + Math.exp((double) -time/100000.0))) * (accuracy-20);
 	}
 	
 	public long getTime() {

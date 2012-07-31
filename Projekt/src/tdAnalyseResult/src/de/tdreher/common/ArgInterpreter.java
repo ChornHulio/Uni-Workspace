@@ -47,12 +47,12 @@ public class ArgInterpreter {
 
 	private static Settings printHelp() {
 		System.out.println();
-		System.out.println("tdAnalyseResult - analyse the results of the prediction");
+		System.out.println("Analyse - analyse the results of the prediction");
 		System.out.println("Author: Tobias Dreher");
 		System.out.println("Date: July 2012");
 		System.out.println();
 		System.out.println("USAGE:");
-		System.out.println("\tjava -jar tdAnalyseResult [options]");
+		System.out.println("\tjava -jar Analyse [options]");
 		System.out.println("\tThe options -i, -p and -o are mandatory!");
 		System.out.println();
 		System.out.println("OPTIONS:");
@@ -65,7 +65,7 @@ public class ArgInterpreter {
 		System.out.println();
 		System.out.println("EXAMPLES:");
 		System.out.println("\tstandard analysis from one input file each");
-		System.out.println("\t\tjava -jar tdAnalyseResult -i features.txt -p result.txt -o analysis.txt");
+		System.out.println("\t\tjava -jar Analyse -i features.txt -p result.txt -o analysis.txt");
 		return null;
 	}
 	

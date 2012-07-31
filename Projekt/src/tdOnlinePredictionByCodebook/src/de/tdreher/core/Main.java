@@ -68,7 +68,7 @@ public class Main {
 
 				// extract features				
 				Process process = runtime
-						.exec("java -jar ./tdFeatureExtraction.jar " +
+						.exec("java -jar ./FeatureExtraction.jar " +
 								"-i " + audioFile.getCanonicalPath() + 
 								" -o " + featureFile.getCanonicalPath() + 
 								" -l 42" +

@@ -3,36 +3,66 @@
 \subsection{Übersicht}
 \begin{frame}{Übersicht}
 	\begin{center}
-		Bild über Ablauf: Vorverarbeitung -> Training -> Ausführen -> Analyse
+		\includegraphics[width=1.0\textwidth]{img/theorieuebersicht}
 	\end{center}
 \end{frame}
 
-\subsection{Vorverarbeitung}
-\begin{frame}{Vorverarbeitung}
+\subsection{Ablauf}
+\begin{frame}{Preprocessing}
 	\begin{itemize}[<+->]
-		\item LPC
-		\item MFCC
+		\item Konvertierung des Audiosignals
+		\begin{itemize}[<1->]
+			\item Mono
+			\item 16000 Hz
+			\item 16 Bit
+		\end{itemize}
+		\item Feature Extraction
+		\begin{itemize}[<1->]
+			\item Linear Predictive Coding (LPC)
+			\item Mel Frequency Cepstral Coefficients (MFCC)
+		\end{itemize}		
+		\item Skalierung
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Training}
-	\begin{itemize}[<+->]
-		\item Neural Gas
-		\item SVM
-	\end{itemize}
+	\begin{columns}
+	\column{0.65\linewidth}
+		\begin{itemize}[<+->]
+			\item Neural Gas
+			\begin{itemize}[<1->]
+				\item Robustes Neuronales Netz
+				\item Nachbarschaftsreichweite
+				\item $\begin{aligned}[t]\Delta w_{i} = \epsilon(t) * e^{\left(-k_i / \lambda(t)\right)} * \left(x - w_i\right)\end{aligned}$
+			\end{itemize}
+			\item Support Vector Machine (SVM)
+			\begin{itemize}[<1->]
+				\item Optimaler Klassifikator
+				\item Multi-Class SVM
+			\end{itemize}
+		\end{itemize}
+		\column{0.35\linewidth}
+		\begin{center}
+			\includegraphics<1>[width=1.0\textwidth]{img/neuralGas}
+			\includegraphics<2>[width=1.0\textwidth]{img/svm}
+		\end{center} 
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Ausführen}
+\begin{frame}{Prediction}
 	\begin{itemize}[<+->]
 		\item Nearest Neighbor
-		\item SVM
+		\begin{itemize}[<1->]
+			\item Distanz zwischen Eingabevektor und Codebookvektoren
+		\end{itemize}
+		\item Klassifikation
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Analyse}
+\begin{frame}{Analysis}
 	\begin{itemize}[<+->]
 		\item Erkennungsrate auf Einzelframes
 		\item Erkennungsrate auf mehreren Frames
-		\item Dingsbumsmatrix
+		\item Verwechslungsmatrix
 	\end{itemize}
 \end{frame}

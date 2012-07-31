@@ -49,12 +49,12 @@ public class ArgInterpreter {
 
 	private static Settings printHelp() {
 		System.out.println();
-		System.out.println("tdPredictByCodebook - predict which label is meant for the given feature vectors");
+		System.out.println("PredictionByCodebook - predict which label is meant for the given feature vectors");
 		System.out.println("Author: Tobias Dreher");
 		System.out.println("Date: July 2012");
 		System.out.println();
 		System.out.println("USAGE:");
-		System.out.println("\tjava -jar tdPredictByCodebook [options]");
+		System.out.println("\tjava -jar PredictionByCodebook [options]");
 		System.out.println("\tThe options -ff, -cf and -o are mandatory!");
 		System.out.println();
 		System.out.println("OPTIONS:");
@@ -68,10 +68,10 @@ public class ArgInterpreter {
 		System.out.println();
 		System.out.println("EXAMPLES:");
 		System.out.println("\t1.) standard prediction (n=1) from one input file each");
-		System.out.println("\t\tjava -jar tdPredictByCodebook -if features.txt -ic codebook.txt -o result.txt");
+		System.out.println("\t\tjava -jar PredictionByCodebook -if features.txt -ic codebook.txt -o result.txt");
 		System.out.println("\t2.) predictions over 10 feature vectors with two input files each and \n\t\t" +
 				"one output file (if it exists it would be append)");
-		System.out.println("\t\tjava -jar tdPredictByCodebook -if features_01.txt -if features_02.txt -ic codebook_01.txt \n\t\t" +
+		System.out.println("\t\tjava -jar PredictionByCodebook -if features_01.txt -if features_02.txt -ic codebook_01.txt \n\t\t" +
 				"-i codebook_02.txt -o result.txt -a");
 		return null;
 	}

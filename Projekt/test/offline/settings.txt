@@ -21,9 +21,23 @@ SVM
 
 lpcNg001: 40.09 %
 lpcNg002: 39.75 %
-lpcSvm001: linear, c=1, g=1, 46.14 %
-lpcSvm002: rbf, c=1, g=1, 53.97 %
+lpcSvm001: linear, 46.14 %
+lpcSvm002: rbf, 53.97 %
 mfccNg001: 70,82 %
 mfccNg002: 71,25 %
-mfccSvm001: linear, c=1, g=1, 71.72 %
-mfccSvm002: rbf, c=1, g=1, 80.44 %
+mfccNg003: 70,99 %
+mfccNg003: with svm-scale, 70,96 %
+mfccNg004: sr=9, c=25, e=84, cs=65, it=9, 71,41 %
+mfccNg005: sr=9, c=30, e=90, cs=65, it=10, 72,07 %
+mfccNg006: sr=5, c=30, e=90, cs=65, it=10, 72,05 %
+mfccNg007: sr=5, c=30, e=90, cs=100, it=10, 73,06 %
+mfccNg008: sr=5, c=30, e=90, cs=65, it=15, 71,58 %
+mfccNg009: sr=2, c=30, e=90, cs=100, it=10, 73,09 %
+mfccNg010: sr=2, c=30, e=93, cs=100, it=10, 72,92 %
+mfccSvm001: linear, 71.72 %
+mfccSvm002: rbf, 80.44 %
+mfccSvm003: linear, 71.72 %
+mfccSvm004: rbf, 80.44 %
+mfccSvm005: without svm-scale, linear, 72.38 %
+mfccSvm006: without svm-scale, rbf, 12.23 %
+mfccSvm007: rbf, e=0, 58.1 %

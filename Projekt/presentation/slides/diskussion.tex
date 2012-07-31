@@ -1,20 +1,40 @@
 \section{Diskussion}
-\begin{frame}{Bewertung der Ergebnisse}
+\subsection{Offline}
+\begin{frame}{Diskussion Offline-Modus}
 	\begin{itemize}[<+->]
-		\item Sehr gute Erkennungsraten im Offline-Modus
-		\item Schlechte Erkennungsraten im Online-Modus
+		\item Gute Erkennungsraten im Offline-Modus (bis 80 \%)
+		\item MFCC deutlich besser als LPC
+		\item Neural Gas und SVM (linearer Kernel) vergleichbar
+		\item Beste Erkennungsraten: MFCC + SVM (RBF-Kernel)
+		\item Skalierbar: MFCC + Neural Gas
+	\end{itemize}
+\end{frame}
+
+\subsection{Online}
+\begin{frame}{Diskussion Online-Modus}
+	\begin{itemize}[<+->]
+		\item Unzuverlässige Erkennungsraten im Online-Modus
 		\begin{itemize}
-			\item[\ding{229}] Mikrophonequalität
+			\item[\ding{229}] Mikrofonunterschiede
+			\item[\ding{229}] geringe Trainingsmenge
+			\item[\ding{229}] fehlende Skalierung
+			\item[\ding{229}] fehlendes Energielevel
 		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Vergleich der Algorithmen}
-	\begin{itemize}[<+->]
-		\item MFCC besser als LPC
-		\item Neural Gas durch Optimierung besser als SVM
-		\begin{itemize}
-			\item[\ding{229}] Optimierung bei SVM aufwendig
+\subsection{Fragen}
+\begin{frame}{Zeit für Fragen}
+	\begin{center}
+		\Huge Fragen?
+	\end{center}
+	\begin{itemize}[<1->]
+		\item \href{https://github.com/ChornHulio/Uni-Workspace/tree/master/Projekt}{https://github.com/ChornHulio/Uni-Workspace -> Projekt}
+		\begin{itemize}[<1->]
+			\item[\ding{229}] Quellcode: src
+			\item[\ding{229}] Slides: presentation
+			\item[\ding{229}] Datensätze: test
 		\end{itemize}
 	\end{itemize}
 \end{frame}
+

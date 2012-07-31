@@ -48,12 +48,12 @@ public class ArgInterpreter {
 
 	private static Settings printHelp() {
 		System.out.println();
-		System.out.println("tdCreateCodebook - reduce feature vectors to a smaller codebook");
+		System.out.println("CreateCodebook - reduce feature vectors to a smaller codebook");
 		System.out.println("Author: Tobias Dreher");
 		System.out.println("Date: July 2012");
 		System.out.println();
 		System.out.println("USAGE:");
-		System.out.println("\tjava -jar tdCreateCodebook [options]");
+		System.out.println("\tjava -jar CreateCodebook [options]");
 		System.out.println("\tThe options -i and -o are mandatory!");
 		System.out.println();
 		System.out.println("OPTIONS:");
@@ -66,10 +66,10 @@ public class ArgInterpreter {
 		System.out.println();
 		System.out.println("EXAMPLES:");
 		System.out.println("\t1.) create standard codebook (size=100, iterations=15) from one input file");
-		System.out.println("\t\tjava -jar tdCreateCodebook -i features.txt -o codebook.txt");
+		System.out.println("\t\tjava -jar CreateCodebook -i features.txt -o codebook.txt");
 		System.out.println("\t2.) create codebook with size=50 and iterations=30 with two input files and \n\t\t" +
 				"one output file (if it exists it would be append)");
-		System.out.println("\t\tjava -jar tdCreateCodebook -i features_01.txt -i features_02.txt -o codebook.txt -a -s 50 -i 30");
+		System.out.println("\t\tjava -jar CreateCodebook -i features_01.txt -i features_02.txt -o codebook.txt -a -s 50 -i 30");
 		return null;
 	}
 	

@@ -12,8 +12,12 @@ ea011: tournament, ended, duration 3 day
 ea012: tournament, ended, duration 4 day
 ea013: truncation, ended, duration 3 day
 ea014: truncation, ended, duration 3 day
-ea015: truncation, wsl50, binA, started 2012-07-28 6 pm
-ea016: truncation, wsl50, binB, started 2012-07-28 6 pm
+ea015: truncation, ended, duration 2 day
+ea016: truncation, ended, duration 2 day
 ea017: truncation, ended, duration 1 day
-ea018: tournament, wsl51, binC, started 2012-07-28 6 pm
-ea019: tournament, wsl51, binD, started 2012-07-28 6 pm
+ea018: tournament, ended, duration 2 day
+ea019: tournament, ended, duration 2 day
+ea020: tournament, v2 (new fitness fct), wsl50, binE, started 2012-07-20 1 pm
+ea021: tournament, v2 (new fitness fct), wsl50, binF, started 2012-07-20 1 pm
+ea022: tournament, v2 (new fitness fct), wsl51, binA, started 2012-07-20 1 pm
+ea023: tournament, v2 (new fitness fct), wsl51, binB, started 2012-07-20 1 pm

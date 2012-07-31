@@ -4,7 +4,7 @@
 \begin{frame}{Übersicht}
 	\begin{itemize}[<+->]
 		\item Unterteilung in (ausführbare) Module
-		\begin{itemize}[<+->]
+		\begin{itemize}[<1->]
 			\item[\textcolor{green}{\ding{223}}] flexible Anwendung möglich
 			\item[\textcolor{green}{\ding{223}}] für weitere Szenarien geeignet
 			\item[\textcolor{red}{\ding{223}}] beschränkte Debuggingmöglichkeiten
@@ -16,6 +16,27 @@
 \subsection{Übersicht}
 \begin{frame}{Übersicht}
 	\begin{center}
-		Module als Bilder (Unterteilung in Vorverarbeitung, Training, Prediction und Analyse)
+		\includegraphics[width=1.0\textwidth]{img/moduluebersicht}
 	\end{center}
+\end{frame}
+
+\subsection{Zusatz}
+\begin{frame}{Zusatz}
+	\begin{itemize}[<+->]
+		\item Shell-Skript für Offline-Test
+		\begin{itemize}[<1->]
+			\item Kreuzvalidierung
+			\item Sämtliche Einstellungen
+		\end{itemize}
+		\item Online-Modus
+		\begin{itemize}[<1->]
+			\item Nutzung der Offline-Module
+			\item MFCC + Neural Gas
+		\end{itemize}
+		\item Evolutionärer Algorithmus
+		\begin{itemize}[<1->]
+			\item Optimierung
+			\item MFCC + Neural Gas
+		\end{itemize}
+	\end{itemize}
 \end{frame}

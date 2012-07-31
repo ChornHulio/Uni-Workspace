@@ -16,20 +16,20 @@ public class Individual implements Comparable<Individual> {
 	private int sampleWidthMax = 9; // 16
 	private int slidingRate = 2;
 	private int slidingRateMin = 1;
-	private int slidingRateMax = 10;
+	private int slidingRateMax = 5;
 	private String window = "hamming";
 	private int coefficents = 20;
-	private int coefficentsMin = 1;
+	private int coefficentsMin = 25;
 	private int coefficentsMax = 38; // smaller than no. of mel-filters in MFCC
 	private int energyLevel = 90;
-	private int energyLevelMin = 0;
-	private int energyLevelMax = 99;
+	private int energyLevelMin = 80;
+	private int energyLevelMax = 98;
 	private int codebookSize = 100;
-	private int codebookSizeMin = 1;
-	private int codebookSizeMax = 1000;
+	private int codebookSizeMin = 50;
+	private int codebookSizeMax = 200;
 	private int ngIterations = 15;
 	private int ngIterationsMin = 1;
-	private int ngIterationsMax = 200;
+	private int ngIterationsMax = 20;
 
 	// mutation rate
 	private double mutationRate = 0.1;
@@ -230,7 +230,7 @@ public class Individual implements Comparable<Individual> {
 
 				// feature extraction
 				for (int i = 1; i < 11; i++) { // for all speaker
-					String processStr = "java -jar tdFeatureExtraction.jar";
+					String processStr = "java -jar FeatureExtraction.jar";
 					processStr += " -i ../speaker/" + i + "/1.wav";
 					processStr += " -i ../speaker/" + i + "/2.wav";
 					processStr += " -l " + i;
@@ -250,7 +250,7 @@ public class Individual implements Comparable<Individual> {
 
 				// test features
 				for (int i = 1; i < 11; i++) { // for all speaker
-					String processStr = "java -jar tdFeatureExtraction.jar";
+					String processStr = "java -jar FeatureExtraction.jar";
 					processStr += " -i ../speaker/" + i + "/3.wav";
 					processStr += " -l " + i;
 					processStr += " -o ../test/" + folder + "/mfcc.testdata";
@@ -268,7 +268,7 @@ public class Individual implements Comparable<Individual> {
 				}
 
 				// create codebook
-				String processStr = "java -jar tdCreateCodebook.jar";
+				String processStr = "java -jar CreateCodebook.jar";
 				processStr += " -i ../test/" + folder + "/mfcc.traindata";
 				processStr += " -o ../test/" + folder + "/mfcc.ng";
 				processStr += " -s " + codebookSize;
@@ -281,7 +281,7 @@ public class Individual implements Comparable<Individual> {
 				process.getErrorStream().close();
 
 				// prediction with testdata
-				processStr = "java -jar tdPredictByCodebook.jar";
+				processStr = "java -jar PredictionByCodebook.jar";
 				processStr += " -ff ../test/" + folder + "/mfcc.testdata";
 				processStr += " -cf ../test/" + folder + "/mfcc.ng";
 				processStr += " -o ../test/" + folder + "/mfcc.res";
@@ -292,7 +292,7 @@ public class Individual implements Comparable<Individual> {
 				process.getErrorStream().close();
 
 				// analyse
-				processStr = "java -jar tdAnalyseResult.jar";
+				processStr = "java -jar Analysis.jar";
 				processStr += " -i ../test/" + folder + "/mfcc.testdata";
 				processStr += " -p ../test/" + folder + "/mfcc.res";
 				processStr += " -o ../test/" + folder + "/mfcc.analysis";
