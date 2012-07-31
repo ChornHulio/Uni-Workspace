@@ -1,0 +1,213 @@
+\NeedsTeXFormat{LaTeX2e}
+\documentclass[a4paper,10pt,bibliography=totoc,oneside,openright,numbers=noenddot,headings=normal,DIV=9
+%,draft
+]{scrreprt}
+\KOMAoptions{DIV=last}
+\usepackage{scrhack}
+
+\pagestyle{headings}
+\usepackage[ngerman]{babel}
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\rmdefault}{phv}
+\renewcommand{\ttdefault}{pcr}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{tabularx}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{setspace}
+\usepackage{listings}
+\lstset{language=Java,
+  showstringspaces=false,
+  frame=single,
+  numbers=left,
+  basicstyle=\ttfamily,
+  numberstyle=\tiny}
+
+% hier Namen etc. einsetzen
+\newcommand{\fullname}{Tobias Dreher}
+\newcommand{\email}{tobias.dreher@uni-ulm.de}
+\newcommand{\titel}{Sprechererkennung}
+\newcommand{\jahr}{2012}
+\newcommand{\matnr}{123456}
+\newcommand{\gutachterA}{Dr.\ Friedhelm Schwenker}
+%\newcommand{\gutachterB}{Dipl.-Inf.\ Sascha Meudt}
+\newcommand{\betreuer}{Dipl.-Inf.\ Sascha Meudt}
+\newcommand{\fakultaet}{Ingenieurwissenschaften\\und Informatik}
+\newcommand{\institut}{Institut für Neuroinformatik}
+
+%color in tables
+\usepackage{colortbl}
+\definecolor{Gray}{rgb}{0.80784, 0.86667, 0.90196} %dunkelblau
+\definecolor{Lightgray}{rgb}{0.9176, 0.95, 0.95686} %hellblau
+\definecolor{Akzent}{rgb}{0.6627, 0.63529, 0.55294} %akzentfarbe
+\setlength{\arrayrulewidth}{0.1pt}
+
+\clubpenalty10000
+\widowpenalty10000
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
+
+% Tiefe, bis zu der Überschriften in das Inhaltsverzeichnis kommen
+\setcounter{tocdepth}{3}
+
+\pdfinfo{
+  /Author (\fullname)
+  /Title (\titel)
+  /Producer     (pdfeTex 3.14159-1.30.6-2.2)
+  /Keywords ()
+}
+
+\usepackage{hyperref}
+\hypersetup{
+pdftitle=\titel,
+pdfauthor=\fullname,
+pdfsubject={Projekt},
+pdfproducer={PDFLaTeX},
+colorlinks=true,
+pdfborder=0 0 0	% keine Box um die Links!
+}
+
+%Trennungsregeln
+\hyphenation{Sil-ben-trenn-ung}
+
+% Schönere Bullets bei Aufzählungen
+% \renewcommand{\labelitemi}{$\bullet$}
+% \renewcommand{\labelitemii}{$\circ$}
+% \renewcommand{\labelitemiii}{$\cdot$}
+
+% TeX-Tricks
+% Dank UTF8 gehen auch Anführungszeichen toll: „“
+% Tastenkombinationen:
+% „ – Windows: AltGr+V, OS X: Alt+^
+% “ – Windows: AltGr+B, OS X: Alt+2
+% Geschützes Leerzeichen: ~
+% In manchen Editoren klappt das leider nicht.
+% Man kann entweder manuell deutsche Anführungszeichen mit \glqq und \grqq
+% setzen oder mit \enquote{Text} die Art der Zeichen für das ganze Dokument
+% im Header anpassen. Siehe dazu die Zeile mit dem Paket csquotes.
+
+
+\begin{document}
+%\frontmatter
+
+% Titelseite
+\thispagestyle{empty}
+\begin{addmargin*}[4mm]{-32mm}
+
+\includegraphics[height=1.8cm]{images/unilogo_bild}
+\hfill
+\includegraphics[height=1.8cm]{images/unilogo_wort}
+\vspace*{2.1em}
+
+{\footnotesize
+{\bfseries Universität Ulm} \textbar ~89069 Ulm \textbar ~Germany
+\hfill\parbox[t]{42mm}{\bfseries Fakultät für\\
+\fakultaet\\
+\mdseries \institut}
+\vspace*{2cm}
+
+\parbox{140mm}{\bfseries \huge \titel}
+
+{\footnotesize Projekt an der Universität Ulm}
+\vspace*{4em}
+
+{\footnotesize
+{\bfseries Vorgelegt von:}\\
+\fullname\\\email\\[2em]
+{\bfseries Gutachter:}\\
+\gutachterA\\
+[2em] %\gutachterB\\
+{\bfseries Betreuer:}\\
+\betreuer
+\\[1.5em]
+\jahr}
+}
+\end{addmargin*}
+
+
+% Impressum
+%\clearpage
+%\thispagestyle{empty}
+%{ \small
+%  \flushleft
+%  „\titel“\\
+%  Fassung vom \today \\ \vfill
+%  \textsc{Danksagungen:} {Danksagungen} \\ \vspace{1cm}
+%  Bei der Erstellung dieser Diplomarbeit wurde ausschließlich freie Software eingesetzt: \\
+%  \begin{figure}[ht]
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/ubuntu}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/texmaker}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/inkscape}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/subversion}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/jabref}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/firefox}}
+%  	\hspace{0.5cm} 
+%  	\subfigure{\includegraphics[height=1cm]{images/sw/evince}}
+%  \end{figure}  
+%  
+%  \vspace{1cm}
+%  Satz: PDF-\LaTeXe \\
+%  Druck: {Druck} \\ \vspace{1cm}
+%  \copyright~\jahr~\fullname\\[0.5em]
+%% Falls keine Lizenz gewünscht wird bitte den folgenden Text entfernen.
+%% Die Lizenz erlaubt es zu nichtkommerziellen Zwecken die Arbeit zu
+%% vervielfältigen und Kopien zu machen. Dabei muss aber immer der Autor
+%% angegeben werden. Eine kommerzielle Verwertung ist für den Autor
+%% weiter möglich.
+%Dieses Werk ist unter der Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Germany License lizensiert: \url{http://creativecommons.org/licenses/by-nc-sa/3.0/de/}\\
+%  Satz: PDF-\LaTeXe
+%}
+
+
+% ab hier Zeilenabstand 1,4 fach 10pt/14pt
+\setstretch{1.4}
+
+\tableofcontents
+
+%\mainmatter
+\input{chapters/einleitung}
+\input{chapters/theorie}
+\input{chapters/implementierung}
+\input{chapters/ergebnisse}
+\input{chapters/diskussion}
+
+\appendix
+% hier Anhänge einbinden
+%\input{chapters/sources}
+
+%\backmatter
+
+\bibliographystyle{plaindin} % Nummern und alphabetisch sortiert
+%\bibliographystyle{alphadin} % Buchstaben und sortiert
+%\bibliographystyle{abbrvdin} % Nummern und abgekürzte Namen
+%\bibliographystyle{unsrtdin} % Nummern und unsortiert
+\bibliography{bibliography}
+
+
+%\clearpage
+%\thispagestyle{empty}
+
+%Name: \fullname \hfill Matrikelnummer: \matnr \vspace{2cm}
+
+%\minisec{Erklärung}
+
+%Ich erkläre, dass ich die Arbeit selbständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel verwendet habe.\vspace{2cm}
+
+%Ulm, den \dotfill
+
+%\hspace{10cm} {\footnotesize \fullname}
+\end{document}
