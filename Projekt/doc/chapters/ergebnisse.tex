@@ -1,8 +1,59 @@
 \chapter{Ergebnisse}
+Übersicht über Ergebnisse
 
 \section{Offline-Modus}
+Übersicht über Offline-Modus
+
 \subsection{Standardwerte}
+10 Sprecher\\
+Eingesetzte Standardwerte sind: (Tabelle?)\\
+Feature Extraction
+\begin{itemize}
+	\item 32 ms Fenster
+	\item Halber Vorschub
+	\item 90 \% Energielevel
+	\item 12 Merkmale (LPC) bzw. 20 Merkmale (MFCC)
+\end{itemize}
+Neural Gas
+\begin{itemize}
+	\item 100 Prototypen
+	\item 15 Iterationen
+\end{itemize}
+SVM
+\begin{itemize}
+	\item RBF oder linearer Kernel
+	\item $\gamma$ = 1
+	\item c = 1
+\end{itemize}
+
 \subsection{Vergleich der Algorithmen}
+\begin{tabular}{l|c|c}			
+	& LPC & MFCC \\
+	\hline
+	Neural Gas & 40 \% & 71 \% \\
+	SVM (linear) & 46 \% & 72 \% \\
+	SVM (RBF) & 54 \% & 80 \% \\
+\end{tabular}
+Verwechslungsmatrixen
+		
 \subsection{Optimierung durch Evolutionären Algorithmus}
+Bilder der Optimierung\\
+Pareto Front (Bild)\\
+Ergebnisse:
+\begin{itemize}
+	\item MFCC
+	\begin{itemize}
+		\item 32 ms Fenster (fix)
+		\item 100 \% -> 20 \% Vorschub
+		\item 96 \% -> 85 \% Energielevel
+		\item 25 - 33 Merkmale
+	\end{itemize}
+	\item Neural Gas
+	\begin{itemize}
+		\item 53 -> 176 Prototypen
+		\item 5 -> 9 Iterationen
+	\end{itemize}
+\end{itemize}
 
 \section{Online-Modus}
+Nicht in Zahlen zu fassen, da kein Test vorhanden ist. Allerdings werden nur mittelmäßige Erkennungsraten erreicht, die von den Sprechern und den Mikrophonen abhängig zu sein scheinen.

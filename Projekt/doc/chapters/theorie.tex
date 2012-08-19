@@ -1,11 +1,36 @@
 \chapter{Theorie}
+Übersicht über dieses Kapitel
 
 \section{Übersicht}
+4 Schritte: Preprocessing, Training, Prediction, Analysis
 
 \section{Preprocessing}
+Übersicht über Preprocessing
+\subsection{Konvertierung}
+Konvertierung des Audiosignals (Mono, 16 kHz, 16 Bit, nicht immer notwendig)
+\subsection{Feature Extration}
+Linear Predictive Coding (LPC)\\
+Mel Frequency Cepstral Coefficients (MFCC)
+\subsection{Skalierung}
+Zwischen -1 und 1 oder zwischen 0 und 1
 
 \section{Training}
+Übersicht über Training, Weitere Möglichkeiten (K-Means, Kohonenkarten,...)
+\subsection{Neural Gas}
+Robustes Neuronales Netz
+Nachbarschaftsreichweite
+Update-Regel
+\subsection{Support Vector Machine}
+Support Vector Machine (SVM) ist ein (optimaler) Klassifikator
+Eingesetzt wird Multi-Class SVM (One vs. One, One vs. Rest)
 
 \section{Prediction}
+Übersicht über Prediction, Erklärung Prediction = Arbeitsphase, erzeugt Ergebnis
+\subsection{Nearest Neighbor}
+Distanz zwischen Eingabevektor und Codebookvektoren
+\subsection{Klassifikation}
+Einordnung von Merkmalsvektoren
 
 \section{Analysis}
+Dient der Überprüfung des Ergebnisses der Prediciton-Phase evtl. mit Visualisierung\\
+Möglichkeiten sind die absolute Erkennungsrate, Erkennungsrate auf mehrere Frames hintereinander, Verwechslungsmatrix

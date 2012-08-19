@@ -1,2 +1,24 @@
 \chapter{Implementierung}
+Übersicht über Implementierung
 
+\section{Modularisierung der Hauptkomponenten}
+Modularisierung aller einzelnen Arbeitsschritten\\
+Informationsaustausch über das schon bestehende Format der libsvm\\
+Vorteile (flexibele Anwendung, Wiederverwendung für ähnliche Probleme wie z.B. Gesichtserkennung) und Nachteile (beschränkte Debuggingmöglichkeiten)
+
+\section{Offline-Test}
+Sämtliche Einstellungen zentral veränderbar\\
+Kreuzvalidierung
+
+\section{Online-Modus}
+Verwendung von MFCC und Neural Gas\\
+Einfache Ausgabe des erkannten Sprechers nach Sprechdauer von x ms
+
+\section{Evolutionärer Algorithmus zur Parameteroptimierung}
+Sämtliche Parameter stellen einen großen Vektorraum dar.\\
+EA dient zur Optimierung dieses Vektorraumes für MFCC und Neural Gas im Offline-Modus\\
+Variable Mutationsrate (Vermeidung von lokalen Minimas)
+Fitnessfunktion $\begin{aligned}[t]f(t,acc) = \frac{acc}{1 - e^{\left(\frac{-t}{1000}\right)}}\end{aligned}$\\
+t = Zeit in Sekunden\\
+acc = Erkennungsrate in Prozent\\
+Tournnament Selektion

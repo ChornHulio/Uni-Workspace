@@ -1,5 +1,20 @@
 \chapter{Diskussion}
+Übersicht über Diskussion
 
 \section{Offline-Modus}
+\begin{itemize}
+	\item Gute Erkennungsraten im Offline-Modus (bis 80 \%)
+	\item MFCC deutlich besser als LPC
+	\item Neural Gas und SVM (linearer Kernel) vergleichbar
+	\item Beste Erkennungsraten: MFCC + SVM (RBF-Kernel)
+	\item Skalierbar: MFCC + Neural Gas
+\end{itemize}
 
 \section{Online-Modus}
+Unzuverlässige Erkennungsraten im Online-Modus
+\begin{itemize}
+	\item Mikrofonunterschiede
+	\item geringe Trainingsmenge
+	\item fehlende Skalierung
+	\item fehlendes Energielevel
+\end{itemize}
