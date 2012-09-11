@@ -26,14 +26,24 @@ Der Vorteil in der Modularisierung liegt in der flexiblen Anwendung. So kann bei
 Ein Bash-Skript dient der Vergleichbarkeit der Ergebnisse. Dieses ermöglicht die Veränderung sämtlicher Einstellungen, wie die Fensterbreite der Featurevektoren oder der Trainingsmethode. Das Skript führt eine Kreuzvalidierung über drei Blöcke durch und speichert das Analyseergebnis in einer Datei.
 
 \section{Online-Modus}
-Verwendung von MFCC und Neural Gas\\
-Einfache Ausgabe des erkannten Sprechers nach Sprechdauer von x ms
+Ein Java-Programm stellt den Online-Modus der Sprechererkennung dar. Dieses verwendet MFCC in der Preprocessing-Phase und Neural Gas in der Trainingsphase. Diese Algorithmen werden verwendet, da sie zum Zeitpunkt der Implentation subjektiv am effizentisten arbeiteten. Das Programm ist so implementiert, dass es immer nach 320 ms ein Statusupdate auf der Konsole ausgibt. In diesem wird der Sprecher über die letzten 1,6 Sekunden ermittelt, wobei neuere Werte stärker gewichtet werden. Die einzelnen Gewinner der neuesten Feature-Vektoren werden 5-fach so stark gewichtet, wie die der ältesten Feature-Vektoren. Die Gewichtung nimmt linear mit dem Alter der Feature-Vektoren ab.
 
 \section{Evolutionärer Algorithmus zur Parameteroptimierung}
-Sämtliche Parameter stellen einen großen Vektorraum dar.\\
-EA dient zur Optimierung dieses Vektorraumes für MFCC und Neural Gas im Offline-Modus\\
-Variable Mutationsrate (Vermeidung von lokalen Minimas)
-Fitnessfunktion $\begin{aligned}[t]f(t,acc) = \frac{acc}{1 - e^{\left(\frac{-t}{1000}\right)}}\end{aligned}$\\
-t = Zeit in Sekunden\\
-acc = Erkennungsrate in Prozent\\
-Tournnament Selektion
+Betrachtet man die einstellbaren Parameter für MFCC und Neural, ergibt dies einen 7-dimensionalen Vektorraum in dem das Optimum der Parameter gefunden werden soll. Die einzelnen Parameter sind:
+\begin{itemize}
+	\item Fensterbreite
+	\item Überlappung der Fenster
+	\item Merkmale pro Fenster
+	\item Minmale Energielevel
+	\item Fensterfunktion (Hamming oder Hann)
+	\item Größe des Codebuchs
+	\item Iterationen des Neural Gas Algorithmus
+\end{itemize}
+Sollte die Fensterbreite veränderbar sein, lassen sich die Ergebnisse nur noch schwer vergleichen, da mit der Fensterbreite auch die Information pro Fenster steigt. Somit wurde diese Einstellung auf 32 ms Fensterbreite fixiert.
+
+Um das Optimum in dem noch verbleibenden 6-dimensionalen Vektorraum zu finden, dient ein Evolutionärer Algorithmus. Dabei wird eine variable Mutationsrate eingesetzt, da diese lokale Optimas besser vermeidet, als eine statitische Mutationsrate. Die Fitnessfunktion stellt die Funktion \ref{equ:fitness} dar. Als Eingabeparameter dienen der Funktion die für den Durchlauf mit den aktuellen Parametern benötigte Zeit in Sekunden $t$, sowie die Erkennungsrate auf Einzelfenster in Prozent $acc$. Zur Selektion dient eine Tournament-Selektion, bei de je vier Individuen gegen einander antreten, wobei nur der beste in die nächste Population gelangt. Eine Population besteht aus 12 Individuen. 
+
+\begin{equation}
+	\label{equ:fitness}
+	\begin{aligned}[t]f(t,acc) = \frac{acc}{1 - e^{\left(\frac{-t}{1000}\right)}}\end{aligned}
+\end{equation}
