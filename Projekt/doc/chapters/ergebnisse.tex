@@ -31,7 +31,7 @@ Bei den Tests handelt es sich jeweils um eine Kreuzvalidierung mit drei Blöcken
 \end{table}
 
 \subsection{Vergleich der Algorithmen}
-Bei dem Test mit den oben genannten Standardwerten, werden die in Tabelle \ref{tbl:vergleich} aufgeführten Ergebnisse erzielt. Hierbei handelt es sich um die Erkennungsrate auf Einzelframes. Spaltenweise wird zwischen den Preprocessing-Algorithmen LPC und MFCC unterschiedenen, zeilenweise zwischen den Trainings-Algorithmen Neural Gas und SVM. Wobei bei SVM nochmals unterschieden wird zwischen dem Einsatz eines linearen Kernels und eines RBF-Kernels. Mit 80 \% Erkennungrate auf Einzelframes das beste Ergebniss erzielt die Kombination aus MFCC und SVM mit RBF-Kernel.
+Bei dem Test mit den oben genannten Standardwerten, werden die in Tabelle \ref{tbl:vergleich} aufgeführten Ergebnisse erzielt. Hierbei handelt es sich um die absolute Erkennungsrate auf Einzelframes. Spaltenweise wird zwischen den Preprocessing-Algorithmen LPC und MFCC unterschiedenen, zeilenweise zwischen den Trainings-Algorithmen Neural Gas und SVM. Wobei bei SVM nochmals unterschieden wird zwischen dem Einsatz eines linearen Kernels und eines RBF-Kernels. Mit 80 \% Erkennungrate auf Einzelframes das beste Ergebniss erzielt die Kombination aus MFCC und SVM mit RBF-Kernel.
 
 \begin{table}[h]
 	\centering
@@ -46,7 +46,7 @@ Bei dem Test mit den oben genannten Standardwerten, werden die in Tabelle \ref{t
 	\label{tbl:vergleich}
 \end{table}
 
-In der Tabelle \ref{tbl:verwechslungsmatrix} ist die Verwechslungsmatrix der Kombination LPC und Neural Gas angegeben. Visualisiert ist diese Tabelle in Abbildung \ref{fig:verwechslungsmatrixA}. Jeweils in der linken Hälfte sind die Anzahl der Erkennungen in Prozentzahlen und rechts daneben die visuelle Darstellung derselben. Auf der x-Achse ist jeweils der erkannte Sprecher, auf der y-Achse der tatsächliche Sprecher aufgetragen. Ideal wären also Matrixen mit 100 \% bzw. die dazu passenden Kreise auf der Diagonale. Die Abbildung \ref{fig:verwechslungsmatrixB} visualisiert die Kombination MFCC und Neural Gas und die Abbildung \ref{fig:verwechslungsmatrixC} visualisiert die Kombination MFCC und SVM mit einem RBF-Kernel.
+In der Tabelle \ref{tbl:verwechslungsmatrix} ist die Verwechslungsmatrix der Kombination LPC und Neural Gas angegeben. Visualisiert ist diese Tabelle in Abbildung \ref{fig:verwechslungsmatrixA}. Auf der x-Achse ist jeweils der erkannte Sprecher, auf der y-Achse der tatsächliche Sprecher aufgetragen. Ideal wären also Matrizen mit 100 \% bzw. die dazu passenden Kreise auf der Diagonale. Die Abbildung \ref{fig:verwechslungsmatrixB} visualisiert die Kombination MFCC und Neural Gas und die Abbildung \ref{fig:verwechslungsmatrixC} visualisiert die Kombination MFCC und SVM mit einem RBF-Kernel. Hierbei ist wieder zu erkennen, dass letztere Kombination die besten Ergebnisse erzielt.
 
 % table settings
 \setlength{\tabcolsep}{6pt} %Abstand zwischen Spalten
@@ -75,7 +75,7 @@ In der Tabelle \ref{tbl:verwechslungsmatrix} ist die Verwechslungsmatrix der Kom
   \centering
   \includegraphics[width=0.8\linewidth]{images/lpcNgMatrix}
   \caption{Visualisierung der in Tabelle \ref{tbl:verwechslungsmatrix} dargestellten Verwechlungsmatrix}
-  \label{fig:verwechlsungsmatrixA}
+  \label{fig:verwechslungsmatrixA}
 \end{figure}
 
 \begin{figure}[h]
@@ -96,24 +96,24 @@ In der Tabelle \ref{tbl:verwechslungsmatrix} ist die Verwechslungsmatrix der Kom
 Es wird das Maximum in einem 6-dimensionale Vektorraum, der sich durch die verschiedenen Parameter von MFCC und Neural Gas ergeben, mittels eines Evolutionären Algorithmus gesucht. Hierbei wird die Fitnessfunktion \ref{equ:fitness} maximiert. In die Fitnessfunktion gehen die Erkennungsrate (engl. \emph{accuracy}) und die Dauer (engl. \emph{duration}) des Individuums ein. In Abbildung \ref{fig:ea1} sind diese drei Punktdiagramme eingezeichnet. Die Schwankungen, die darin zu sehen sind, sind gewollt und erhöhen die Diversität.
 
 \begin{figure}[h]
-	\label{fig:ea1}
 	\centering
 	\includegraphics[width=1\textwidth]{images/ea1}
 	\caption{Erkennungsrate, Dauer und die dazugehörige Fitness}
+	\label{fig:ea1}
 \end{figure}
 
 Um nun das Optimum sowohl was die Dauer der Ausführung, als auch der Erkennungsrate angeht, zu finden, wird eine Pareto-Front erstellt. Diese ist in Abbildung \ref{fig:ea2} dargestellt. Grün dargestellte Punkte stellen die Pareto-Front dar.
 
 \begin{figure}[h]
-	\label{fig:ea2}
 	\centering
-	\includegraphics[width=0.5\textwidth]{images/ea2}
+	\includegraphics[width=0.43\textwidth]{images/ea2}
 	\caption{Pareto-Front (grüne Punkte)}
+	\label{fig:ea2}
 \end{figure}
 
-Hieraus ergeben sich folgende optimale Werte für MFCC und Neural Gas. Überlappen sich die Fenster bis zu 80 \% kann eine bessere Erkennungrate erzielt werden, allerdings erhöht sich auch die Ausführungsdauer. Wobei auch schon mit geringer oder gar keiner Überlappung beachtliche Erkennungsraten erreicht werden. Das optimale Energielevel liegt zwischen 96 \% und 85 \%. Die niedrigeren Energielevel haben eine bessere Erkennungsrate zur Folge. Die optimale Anzahl von Merkmalen der Feature Vektoren schwankt zwischen 25 und 33 Stück. Bei Neural Gas liegen die Anzahl der Prototypen zwischen 53 und 176 Stück. Höhere Prototypenanzahlen haben bessere Erkennungsraten, aber auch schlechtere Ausführungsgeschwindigkeiten zur Folge. Das gleiche gilt für die Anzahl der Iterationen des Algorithmus. Wobei hier die Spanne zwischen 5 und 9 Iterationen liegt.
+Hieraus ergeben sich folgende optimale Werte für MFCC und Neural Gas. Überlappen sich die Fenster bis zu 80 \% kann eine bessere Erkennungsrate erzielt werden, allerdings erhöht sich auch die Ausführungsdauer. Wobei auch schon mit geringer oder gar keiner Überlappung beachtliche Erkennungsraten erreicht werden. Das optimale Energielevel liegt zwischen 96 \% und 85 \%. Die niedrigeren Energielevel haben eine bessere Erkennungsrate zur Folge. Die optimale Anzahl von Merkmalen der Feature Vektoren schwankt zwischen 25 und 33 Stück. Bei Neural Gas liegen die Anzahl der Prototypen zwischen 53 und 176 Stück. Höhere Prototypenanzahlen haben bessere Erkennungsraten, aber auch schlechtere Ausführungsgeschwindigkeiten zur Folge. Das gleiche gilt für die Anzahl der Iterationen des Algorithmus. Wobei hier die Spanne zwischen 5 und 9 Iterationen liegt.
 
-Folglich hat die Parameteroptimierung die Erkennungsrate nochmals um ca. zwei Prozentpunkte gegenüber der Erkennungsrate mit den Standardparametern erhöht. Ob wirklich ein globales Optimum gefunden wird, kann bei einem Evolutionären Algorithmus nur schwer, meist gar nicht, bewiesen werden. Somit stellen die angegeben Werte lediglich ein in dieser Projektarbeit erreichtes Optimum dar.
+Folglich hat die Parameteroptimierung die Erkennungsrate nochmals um ca. zwei Prozentpunkte gegenüber der Erkennungsrate mit den Standardparametern erhöht. Ob dies ein globales Optimum darstellt kann nicht bewiesen werden. Somit stellen die angegeben Werte lediglich ein in dieser Projektarbeit erreichtes Optimum dar.
 
 \section{Online-Modus}
 Da für den Online-Modus kein Testszenario vorhanden ist, sind die Ergebnisse dieses Modus nur subjektiv. Durch das implementierte Programm können nur schlechte bis mittelmäßige Erkennungsraten erzielt werden. Vieles ist von den Sprechern und den Mikrophonen abhängig. So werden manche Sprecher besser erkannt, als andere.
