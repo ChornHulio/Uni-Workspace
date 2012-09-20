@@ -19,10 +19,12 @@
 \usepackage{subfigure}
 \usepackage{url}
 \usepackage{color}
+\definecolor{LinkColor}{rgb}{0,0,0.2}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{setspace}
+\usepackage{fullpage} % or addmargin in cover
 \usepackage{listings}
 \lstset{language=Java,
   showstringspaces=false,
@@ -38,7 +40,6 @@
 \newcommand{\jahr}{2012}
 \newcommand{\matnr}{123456}
 \newcommand{\gutachterA}{Dr.\ Friedhelm Schwenker}
-%\newcommand{\gutachterB}{Dipl.-Inf.\ Sascha Meudt}
 \newcommand{\betreuer}{Dipl.-Inf.\ Sascha Meudt}
 \newcommand{\fakultaet}{Ingenieurwissenschaften\\und Informatik}
 \newcommand{\institut}{Institut für Neuroinformatik}
@@ -57,12 +58,12 @@
 \setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
 
 % Tiefe, bis zu der Überschriften in das Inhaltsverzeichnis kommen
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{1}
 
 \pdfinfo{
   /Author (\fullname)
   /Title (\titel)
-  /Producer     (pdfeTex 3.14159-1.30.6-2.2)
+  /Producer (PDFLaTeX)
   /Keywords ()
 }
 
@@ -73,35 +74,24 @@ pdfauthor=\fullname,
 pdfsubject={Projekt},
 pdfproducer={PDFLaTeX},
 colorlinks=true,
+	linkcolor=LinkColor,
+	citecolor=LinkColor,
+	filecolor=LinkColor,
+	menucolor=LinkColor,
+	urlcolor=LinkColor,
 pdfborder=0 0 0	% keine Box um die Links!
 }
 
 %Trennungsregeln
 \hyphenation{Sil-ben-trenn-ung}
 
-% Schönere Bullets bei Aufzählungen
-% \renewcommand{\labelitemi}{$\bullet$}
-% \renewcommand{\labelitemii}{$\circ$}
-% \renewcommand{\labelitemiii}{$\cdot$}
-
-% TeX-Tricks
-% Dank UTF8 gehen auch Anführungszeichen toll: „“
-% Tastenkombinationen:
-% „ – Windows: AltGr+V, OS X: Alt+^
-% “ – Windows: AltGr+B, OS X: Alt+2
-% Geschützes Leerzeichen: ~
-% In manchen Editoren klappt das leider nicht.
-% Man kann entweder manuell deutsche Anführungszeichen mit \glqq und \grqq
-% setzen oder mit \enquote{Text} die Art der Zeichen für das ganze Dokument
-% im Header anpassen. Siehe dazu die Zeile mit dem Paket csquotes.
-
-
 \begin{document}
 %\frontmatter
 
 % Titelseite
 \thispagestyle{empty}
-\begin{addmargin*}[4mm]{-32mm}
+%\begin{addmargin*}[-8mm]{8mm}
+\vspace*{1.0em}
 
 \includegraphics[height=1.8cm]{images/unilogo_bild}
 \hfill
@@ -131,46 +121,7 @@ pdfborder=0 0 0	% keine Box um die Links!
 \\[1.5em]
 \jahr}
 }
-\end{addmargin*}
-
-
-% Impressum
-%\clearpage
-%\thispagestyle{empty}
-%{ \small
-%  \flushleft
-%  „\titel“\\
-%  Fassung vom \today \\ \vfill
-%  \textsc{Danksagungen:} {Danksagungen} \\ \vspace{1cm}
-%  Bei der Erstellung dieser Diplomarbeit wurde ausschließlich freie Software eingesetzt: \\
-%  \begin{figure}[ht]
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/ubuntu}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/texmaker}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/inkscape}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/subversion}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/jabref}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/firefox}}
-%  	\hspace{0.5cm} 
-%  	\subfigure{\includegraphics[height=1cm]{images/sw/evince}}
-%  \end{figure}  
-%  
-%  \vspace{1cm}
-%  Satz: PDF-\LaTeXe \\
-%  Druck: {Druck} \\ \vspace{1cm}
-%  \copyright~\jahr~\fullname\\[0.5em]
-%% Falls keine Lizenz gewünscht wird bitte den folgenden Text entfernen.
-%% Die Lizenz erlaubt es zu nichtkommerziellen Zwecken die Arbeit zu
-%% vervielfältigen und Kopien zu machen. Dabei muss aber immer der Autor
-%% angegeben werden. Eine kommerzielle Verwertung ist für den Autor
-%% weiter möglich.
-%Dieses Werk ist unter der Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Germany License lizensiert: \url{http://creativecommons.org/licenses/by-nc-sa/3.0/de/}\\
-%  Satz: PDF-\LaTeXe
-%}
+%\end{addmargin*}
 
 
 % ab hier Zeilenabstand 1,4 fach 10pt/14pt

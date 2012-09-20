@@ -1,4 +1,5 @@
 \chapter{Ergebnisse}
+\label{cha:ergebnisse}
 In diesem Kapitel werden die Ergebnisse der zwei Modi vorgestellt. Zum einen ist dies der Offline-Modus, zum anderen der Online-Modus. 
 
 \section{Offline-Modus}
@@ -13,7 +14,6 @@ Bei den Tests handelt es sich jeweils um eine Kreuzvalidierung mit drei Blöcken
 
 \begin{table}[h]
 	\centering
-	\label{tbl:standardwerte}
 	\begin{tabular}{l|c|c|c|c}			
 		& \textbf{LPC} & \textbf{MFCC} & \textbf{Neural Gas} & \textbf{SVM} \\
 		\hline
@@ -24,9 +24,10 @@ Bei den Tests handelt es sich jeweils um eine Kreuzvalidierung mit drei Blöcken
 		\textbf{Fensterfunktion} & Hamming & Hamming & & \\
 		\textbf{Anzahl der Prototypen} & & & 100 & \\
 		\textbf{Anzahl der Iterationen} & & & 15 & \\
-		\textbf{$\gamma$ und c} & & & & 1 \\
+		\textbf{$\gamma$ und $C$} & & & & 1 \\
 	\end{tabular}
 	\caption{Standardeinstellungen der vier zu vergleichenden Algorithmen}
+	\label{tbl:standardwerte}
 \end{table}
 
 \subsection{Vergleich der Algorithmen}
@@ -34,7 +35,6 @@ Bei dem Test mit den oben genannten Standardwerten, werden die in Tabelle \ref{t
 
 \begin{table}[h]
 	\centering
-	\label{tbl:vergleich}
 	\begin{tabular}{l|c|c}			
 		& \textbf{LPC} & \textbf{MFCC} \\
 		\hline
@@ -43,41 +43,54 @@ Bei dem Test mit den oben genannten Standardwerten, werden die in Tabelle \ref{t
 		\textbf{SVM (RBF-Kernel)} & 54 \% & 80 \% \\
 	\end{tabular}
 	\caption{Erkennungsrate auf Einzelframes}
+	\label{tbl:vergleich}
 \end{table}
 
-Im den Abbildungen TODO werden Verwechlsungsmatrixen einiger Kombinationen aufgezeigt. Jeweils in der linken Hälfte sind die Anzahl der Erkennungen in Prozentzahlen und rechts daneben die visuelle Darstellung derselben. Auf der x-Achse ist jeweils der erkannte Sprecher, auf der y-Achse der tatsächliche Sprecher aufgetragen. Ideal wären also Matrixen mit 100 \% bzw. die dazu passenden Kreise auf der Diagonale.
+In der Tabelle \ref{tbl:verwechslungsmatrix} ist die Verwechslungsmatrix der Kombination LPC und Neural Gas angegeben. Visualisiert ist diese Tabelle in Abbildung \ref{fig:verwechslungsmatrixA}. Jeweils in der linken Hälfte sind die Anzahl der Erkennungen in Prozentzahlen und rechts daneben die visuelle Darstellung derselben. Auf der x-Achse ist jeweils der erkannte Sprecher, auf der y-Achse der tatsächliche Sprecher aufgetragen. Ideal wären also Matrixen mit 100 \% bzw. die dazu passenden Kreise auf der Diagonale. Die Abbildung \ref{fig:verwechslungsmatrixB} visualisiert die Kombination MFCC und Neural Gas und die Abbildung \ref{fig:verwechslungsmatrixC} visualisiert die Kombination MFCC und SVM mit einem RBF-Kernel.
 
 % table settings
 \setlength{\tabcolsep}{6pt} %Abstand zwischen Spalten
 \renewcommand{\arraystretch}{1.1} %Zeilenabstand
 
-\begin{figure}[h]
-	\label{tbl:lpcNgMatrix}
+\begin{table}[h]
 	\centering
-	\hspace*{-15mm}
-	\begin{minipage}[t]{0.58\linewidth}
-		\begin{tabular}{c|cccccccccc}
-			& \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} \\ \hline
-			\textbf{1} & 54 & 6 & 4 & 3 & 6 & 4 & 5 & 3 & 12 & 2 \\
-			\textbf{2} & 5 & 50 & 8 & 4 & 8 & 3 & 9 & 5 & 6 & 3 \\
-			\textbf{3} & 6 & 12 & 29 & 7 & 10 & 6 & 8 & 11 & 4 & 7 \\
-			\textbf{4} & 5 & 6 & 7 & 65 & 3 & 1 & 1 & 5 & 3 & 5 \\
-			\textbf{5} & 6 & 7 & 7 & 2 & 26 & 9 & 16 & 10 & 9 & 9 \\
-			\textbf{6} & 4 & 2 & 5 & 1 & 9 & 31 & 13 & 13 & 14 & 9 \\
-			\textbf{7} & 3 & 8 & 3 & 1 & 12 & 10 & 27 & 12 & 8 & 16 \\
-			\textbf{8} & 3 & 4 & 6 & 3 & 10 & 10 & 14 & 27 & 8 & 14 \\
-			\textbf{9} & 10 & 7 & 4 & 2 & 8 & 14 & 9 & 10 & 33 & 5 \\
-			\textbf{10} & 1 & 1 & 2 & 2 & 4 & 8 & 11 & 10 & 3 & 56 \\
-		\end{tabular}
-	\end{minipage}
-	\begin{minipage}[t]{0.4\linewidth}
-		\centering
-    	\includegraphics[width=1\linewidth]{images/lpcNgMatrix}
-	\end{minipage}
-	\caption{Verwechslungsmatrix für die Kombination LPC und Neural Gas}
+	\begin{tabular}{c|cccccccccc}
+		& \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} \\ \hline
+		\textbf{1} & 54 & 6 & 4 & 3 & 6 & 4 & 5 & 3 & 12 & 2 \\
+		\textbf{2} & 5 & 50 & 8 & 4 & 8 & 3 & 9 & 5 & 6 & 3 \\
+		\textbf{3} & 6 & 12 & 29 & 7 & 10 & 6 & 8 & 11 & 4 & 7 \\
+		\textbf{4} & 5 & 6 & 7 & 65 & 3 & 1 & 1 & 5 & 3 & 5 \\
+		\textbf{5} & 6 & 7 & 7 & 2 & 26 & 9 & 16 & 10 & 9 & 9 \\
+		\textbf{6} & 4 & 2 & 5 & 1 & 9 & 31 & 13 & 13 & 14 & 9 \\
+		\textbf{7} & 3 & 8 & 3 & 1 & 12 & 10 & 27 & 12 & 8 & 16 \\
+		\textbf{8} & 3 & 4 & 6 & 3 & 10 & 10 & 14 & 27 & 8 & 14 \\
+		\textbf{9} & 10 & 7 & 4 & 2 & 8 & 14 & 9 & 10 & 33 & 5 \\
+		\textbf{10} & 1 & 1 & 2 & 2 & 4 & 8 & 11 & 10 & 3 & 56 \\
+	\end{tabular}
+	\caption{Verwechslungsmatrix der Kombination LPC und Neural Gas (in Prozent)}
+	\label{tbl:verwechslungsmatrix}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{images/lpcNgMatrix}
+  \caption{Visualisierung der in Tabelle \ref{tbl:verwechslungsmatrix} dargestellten Verwechlungsmatrix}
+  \label{fig:verwechlsungsmatrixA}
 \end{figure}
 
-TODO weitere Verwechslungsmatrixen und das saubere Anordnen nebeneinander...
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{images/mfccNgMatrix}
+  \caption{Verwechslungsmatrix der Kombination MFCC und Neural Gas}
+  \label{fig:verwechslungsmatrixB}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{images/mfccSvmRbfMatrix}
+  \caption{Verwechslungsmatrix der Kombination MFCC und SVM mit RBF-Kernel}
+  \label{fig:verwechslungsmatrixC}
+\end{figure}
 		
 \subsection{Optimierung durch Evolutionären Algorithmus}
 Es wird das Maximum in einem 6-dimensionale Vektorraum, der sich durch die verschiedenen Parameter von MFCC und Neural Gas ergeben, mittels eines Evolutionären Algorithmus gesucht. Hierbei wird die Fitnessfunktion \ref{equ:fitness} maximiert. In die Fitnessfunktion gehen die Erkennungsrate (engl. \emph{accuracy}) und die Dauer (engl. \emph{duration}) des Individuums ein. In Abbildung \ref{fig:ea1} sind diese drei Punktdiagramme eingezeichnet. Die Schwankungen, die darin zu sehen sind, sind gewollt und erhöhen die Diversität.
